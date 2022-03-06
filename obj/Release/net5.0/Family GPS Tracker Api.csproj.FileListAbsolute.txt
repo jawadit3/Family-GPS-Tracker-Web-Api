@@ -60,3 +60,5 @@ C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Re
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\ref\Family GPS Tracker Api.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\Family GPS Tracker Api.pdb
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\Family GPS Tracker Api.genruntimeconfig.cache
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\CorePush.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\BouncyCastle.Crypto.dll
