@@ -7,12 +7,12 @@ namespace Family_GPS_Tracker_Api.Models
 {
     public partial class Geofence
     {
-        public int GeofenceId { get; set; }
+        public Guid GeofenceId { get; set; }
         public string Category { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public double Radius { get; set; }
-        public int ChildId { get; set; }
+        public Guid ChildId { get; set; }
 
         public virtual Child Child { get; set; }
     }
