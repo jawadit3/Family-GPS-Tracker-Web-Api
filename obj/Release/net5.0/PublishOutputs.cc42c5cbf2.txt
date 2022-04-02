@@ -4,6 +4,7 @@ C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Re
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Family GPS Tracker Api.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Family GPS Tracker Api.runtimeconfig.json
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Family GPS Tracker Api.pdb
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\CorePush.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Microsoft.AspNetCore.JsonPatch.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Microsoft.Data.SqlClient.dll
@@ -20,6 +21,7 @@ C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Re
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Newtonsoft.Json.Bson.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\BouncyCastle.Crypto.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll

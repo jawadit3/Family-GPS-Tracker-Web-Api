@@ -4,12 +4,14 @@ namespace Family_GPS_Tracker_Api.Dtos
 {
 	public class ParentDto
 	{
-		public Guid ParentId { get; set; }
-		public string Name { get; set; }
-		public string Email { get; set; }
-		public string Password { get; set; }
-		public string PhoneNumber { get; set; }
-		public string UserType { get; set; }
+		public Guid parentId { get; set; }
+		public string name { get; set; }
+		public string email { get; set; }
+		public string password { get; set; }
+		public string phoneNumber { get; set; }
+
+		public string deviceToken { get; set; }
+		
 
 	}
 }
