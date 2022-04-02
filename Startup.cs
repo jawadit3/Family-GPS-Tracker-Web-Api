@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static Family_GPS_Tracker_Api.Services.NotificationService;
+using Family_GPS_Tracker_Api.Options;
 
 namespace Family_GPS_Tracker_Api
 {
@@ -68,9 +69,14 @@ namespace Family_GPS_Tracker_Api
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
-				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Family_GPS_Tracker_Api v1"));
+				
+				
 			}
+
+			var swaggerOptions = new SwaggerOptions();
+			Configuration.GetSection(nameof(swaggerOptions)).Bind(swaggerOptions);
+			app.UseSwagger(option => option.RouteTemplate = swaggerOptions.JsonRoute);
+			app.UseSwaggerUI(option => option.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description));
 
 			app.UseHttpsRedirection();
 

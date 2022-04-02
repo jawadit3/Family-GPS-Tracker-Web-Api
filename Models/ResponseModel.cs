@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CatalogWebApi.Models
 {
-    public class ResponseModel<T>
+    public class ResponseModel
     {
         [JsonProperty("isSuccess")]
         public bool IsSuccess { get; set; }
@@ -18,6 +18,6 @@ namespace CatalogWebApi.Models
         public string Message { get; set; }
 
         [JsonProperty("data")]
-        public T Data { get; set; }
+        public String Data { get; set; }
     }
 }
