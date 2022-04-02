@@ -23,6 +23,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Family_GPS_Tracker_Api.Services.NotificationService;
 using Family_GPS_Tracker_Api.Options;
+using Family_GPS_Tracker_Api.Installers;
 
 namespace Family_GPS_Tracker_Api
 {
@@ -38,29 +39,7 @@ namespace Family_GPS_Tracker_Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-
-			services.AddControllers();
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Family_GPS_Tracker_Api", Version = "v1" });
-			});
-			services.AddControllersWithViews()
-				.AddNewtonsoftJson(options =>
-			options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-			);
-			services.AddScoped<FamilyTrackerDatabaseContext, FamilyTrackerDatabaseContext>();
-			services.AddDbContext<FamilyTrackerDatabaseContext>(
-			options => options.UseSqlServer("name=ConnectionStrings:FamilyTrackerDb"));
-			services.AddScoped<UserRepository, UserRepository>();
-			services.AddScoped<ParentRepository, ParentRepository>();
-			services.AddScoped<ChildRepository, ChildRepository>();
-			services.AddScoped<LocationRepository, LocationRepository>();
-			services.AddScoped<NotificationRepository, NotificationRepository>();
-			var appSettingsSection = Configuration.GetSection("FcmNotification");
-			services.Configure<FcmNotificationSetting>(appSettingsSection);
-			services.AddTransient<INotificationService, NotificationService>();
-			services.AddHttpClient<FcmSender>();
-			services.AddHttpClient<ApnSender>();
+			services.InstallServicesInAssembly(Configuration);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
