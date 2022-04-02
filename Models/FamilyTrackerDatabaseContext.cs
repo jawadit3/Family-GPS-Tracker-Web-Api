@@ -44,11 +44,29 @@ namespace Family_GPS_Tracker_Api.Models
                     .HasColumnName("child_id");
 
                 entity.Property(e => e.Code)
+                    .HasMaxLength(10)
+                    .HasColumnName("code")
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("code");
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
 
                 entity.Property(e => e.ParentId).HasColumnName("parent_id");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
 
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.Children)
@@ -99,17 +117,19 @@ namespace Family_GPS_Tracker_Api.Models
 
                 entity.Property(e => e.ChildId).HasColumnName("child_id");
 
-                entity.Property(e => e.Latitude)
-                    .HasColumnType("decimal(18, 0)")
-                    .HasColumnName("latitude");
+                entity.Property(e => e.Latitude).HasColumnName("latitude");
 
-                entity.Property(e => e.Longitude)
-                    .HasColumnType("decimal(18, 0)")
-                    .HasColumnName("longitude");
+                entity.Property(e => e.Longitude).HasColumnName("longitude");
 
                 entity.Property(e => e.Time)
-                    .HasColumnType("datetime")
+                    .IsRequired()
+                    .HasMaxLength(80)
+                    .IsUnicode(false)
                     .HasColumnName("time");
+
+                entity.Property(e => e.UniqueNumber)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("unique_number");
 
                 entity.HasOne(d => d.Child)
                     .WithMany(p => p.Locations)
@@ -168,9 +188,27 @@ namespace Family_GPS_Tracker_Api.Models
                     .HasColumnName("parent_id");
 
                 entity.Property(e => e.DeviceToken)
-                    .HasMaxLength(50)
+                    .HasMaxLength(220)
                     .IsUnicode(false)
                     .HasColumnName("device_token");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
 
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
@@ -189,25 +227,7 @@ namespace Family_GPS_Tracker_Api.Models
 
                 entity.Property(e => e.ChildId).HasColumnName("child_id");
 
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .HasColumnName("email")
-                    .IsFixedLength(true);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .HasColumnName("name")
-                    .IsFixedLength(true);
-
                 entity.Property(e => e.ParentId).HasColumnName("parent_id");
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .HasColumnName("password")
-                    .IsFixedLength(true);
 
                 entity.Property(e => e.UserTypeId).HasColumnName("user_type_id");
 

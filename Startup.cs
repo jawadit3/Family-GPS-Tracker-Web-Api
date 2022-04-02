@@ -1,7 +1,12 @@
-/*using Family_GPS_Tracker_Api.Models;
-using Family_GPS_Tracker_Api.Repositories;*/
 using Family_GPS_Tracker_Api.Models;
 using Family_GPS_Tracker_Api.Repositories;
+using CatalogWebApi.Models;
+using CorePush.Apple;
+using CorePush.Google;
+using Family_GPS_Tracker_Api.Repositories;
+using Family_GPS_Tracker_Api.Models;
+using Family_GPS_Tracker_Api.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Family_GPS_Tracker_Api.Services.NotificationService;
 
 namespace Family_GPS_Tracker_Api
 {
@@ -41,11 +47,19 @@ namespace Family_GPS_Tracker_Api
 				.AddNewtonsoftJson(options =>
 			options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 			);
-			//services.AddScoped<FamilyTrackerDatabaseContext,FamilyTrackerDatabaseContext>();
+			services.AddScoped<FamilyTrackerDatabaseContext, FamilyTrackerDatabaseContext>();
 			services.AddDbContext<FamilyTrackerDatabaseContext>(
 			options => options.UseSqlServer("name=ConnectionStrings:FamilyTrackerDb"));
 			services.AddScoped<UserRepository, UserRepository>();
-
+			services.AddScoped<ParentRepository, ParentRepository>();
+			services.AddScoped<ChildRepository, ChildRepository>();
+			services.AddScoped<LocationRepository, LocationRepository>();
+			services.AddScoped<NotificationRepository, NotificationRepository>();
+			var appSettingsSection = Configuration.GetSection("FcmNotification");
+			services.Configure<FcmNotificationSetting>(appSettingsSection);
+			services.AddTransient<INotificationService, NotificationService>();
+			services.AddHttpClient<FcmSender>();
+			services.AddHttpClient<ApnSender>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,15 +1,58 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CatalogWebApi.Models;
+using Family_GPS_Tracker_Api;
+using Family_GPS_Tracker_Api.Dtos;
+using Family_GPS_Tracker_Api.Models;
+using Family_GPS_Tracker_Api.Repositories;
+using Family_GPS_Tracker_Api.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Family_GPS_Tracker_Api.Controllers
+namespace Catalog.Controllers
 {
-	[Route("/notification")]
+	[Route("notification")]
+	[ApiController]
 	public class NotificationController : ControllerBase
 	{
-		public 
+		private readonly INotificationService _notificationService;
+		private readonly ParentRepository _parentRepository;
+
+		public NotificationController(INotificationService notificationService,
+			ParentRepository parentRepository)
+		{
+			_notificationService = notificationService;
+			_parentRepository = parentRepository;
+		}
+
+		[Route("send")]
+		[HttpPost]
+		public async Task<IActionResult> SendNotification(NotificationModelDto notificationModelDto)
+		{
+			var token = _parentRepository.GetDeviceToken(notificationModelDto.RecieverId);
+			if (token == null)
+			{
+				NotFound();
+			}
+			var result = await _notificationService.SendNotification(new NotificationModel
+			{
+				DeviceId = token,
+				Body = notificationModelDto.Body,
+				IsAndroiodDevice = notificationModelDto.IsAndroiodDevice,
+				Title = notificationModelDto.Title
+
+			}, notificationModelDto.SenderId, notificationModelDto.RecieverId);
+			return Ok(result);
+		}
+
+
+		[HttpGet]
+		public ActionResult<ICollection<NotificationDto>> GetAll()
+		{
+			return _notificationService.GetNotifications().AsNotificationDtoList();
+		}
 
 	}
 }

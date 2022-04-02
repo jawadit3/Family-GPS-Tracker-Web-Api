@@ -16,57 +16,27 @@ namespace Family_GPS_Tracker_Api.Repositories
 		{
 			_db = db;
 			//_db.ChangeTracker.LazyLoadingEnabled = false;
-			
+
 		}
 
-		public void CreateEntity(Parent item)
+		public User GetUser(String email)
 		{
-			_db.Parents.Add(item);
-			_db.SaveChanges();
-		}
-
-		public void DeleteEntity(User item)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<User> GetEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public User GetUser(String email) {
 			return _db.Users
+				.Include(user => user.Parent)
+				.Include(user => user.Child)
 				.Include(user => user.UserType)
-				.Where(user => user.Email == email)
+				.Where(user => user.Parent.Email == email || user.Child.Email == email)
 				.FirstOrDefault();
 		}
 
-		public User GetUserDetails(Guid id) {
+		public User GetUserDetails(String email)
+		{
 			return _db.Users.Include(user => user.UserType)
 				.Include(user => user.Parent)
 				.Include(user => user.Child)
-				.Where(user => user.UserId == id)
-				.FirstOrDefault();
-				
-		}
-
-		public User GetParentDetails(Guid id)
-		{
-			return _db.Users
-				.Include(user => user.Parent)
-				.ThenInclude(parent => parent.Children)
-				.Include(user => user.UserType)
-				.Where(user => user.ParentId == id)
+				.Where(user => user.Parent.Email == email || user.Child.Email == email)
 				.FirstOrDefault();
 
 		}
-
-		public void CreateParent(User user) {
-			_db.Users.Add(user);
-			_db.SaveChanges();
-		}
-
-
 	}
 }
