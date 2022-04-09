@@ -1,6 +1,7 @@
 ﻿using CatalogWebApi.Models;
 using CorePush.Apple;
 using CorePush.Google;
+using Family_GPS_Tracker_Api.Models;
 using Family_GPS_Tracker_Api.Repositories;
 using Family_GPS_Tracker_Api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace Family_GPS_Tracker_Api.Installers
 			services.AddScoped<LocationRepository, LocationRepository>();
 			services.AddScoped<NotificationRepository, NotificationRepository>();
 			var appSettingsSection = Configuration.GetSection("FcmNotification");
-			services.Configure<FcmNotificationSetting>(appSettingsSection);
+			services.Configure<FcmNotificationOptions>(appSettingsSection);
 			services.AddTransient<INotificationService, NotificationService>();
 			services.AddHttpClient<FcmSender>();
 			services.AddHttpClient<ApnSender>();

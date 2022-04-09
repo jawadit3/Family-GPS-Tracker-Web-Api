@@ -10,7 +10,7 @@ namespace Family_GPS_Tracker_Api.Models
         public Guid NotificationId { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string CreatedAt { get; set; }
         public Guid ChildId { get; set; }
         public Guid ParentId { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using CatalogWebApi.Models;
 using Family_GPS_Tracker_Api;
-using Family_GPS_Tracker_Api.Dtos;
+using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
+using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
 using Family_GPS_Tracker_Api.Models;
 using Family_GPS_Tracker_Api.Repositories;
 using Family_GPS_Tracker_Api.Services;
@@ -29,7 +30,7 @@ namespace Catalog.Controllers
 
 		[Route("send")]
 		[HttpPost]
-		public async Task<IActionResult> SendNotification(NotificationModelDto notificationModelDto)
+		public async Task<IActionResult> SendNotification(CreateNotificationDto notificationModelDto)
 		{
 			var token = _parentRepository.GetDeviceToken(notificationModelDto.RecieverId);
 			if (token == null)

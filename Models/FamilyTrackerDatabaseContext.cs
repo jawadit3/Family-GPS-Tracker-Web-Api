@@ -149,7 +149,9 @@ namespace Family_GPS_Tracker_Api.Models
                 entity.Property(e => e.ChildId).HasColumnName("child_id");
 
                 entity.Property(e => e.CreatedAt)
-                    .HasColumnType("datetime")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("created_at");
 
                 entity.Property(e => e.Message)

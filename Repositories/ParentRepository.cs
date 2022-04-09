@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Family_GPS_Tracker_Api.Dtos;
+using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
+using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
 
 namespace Family_GPS_Tracker_Api.Repositories
 {

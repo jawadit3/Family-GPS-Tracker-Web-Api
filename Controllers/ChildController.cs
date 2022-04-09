@@ -1,7 +1,9 @@
-﻿using Family_GPS_Tracker_Api.Dtos;
+﻿
 using Family_GPS_Tracker_Api.Models;
 using Family_GPS_Tracker_Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
+using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

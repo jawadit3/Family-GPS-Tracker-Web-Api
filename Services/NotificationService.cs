@@ -23,14 +23,14 @@ namespace Family_GPS_Tracker_Api.Services
 
 	public class NotificationService : INotificationService
 	{
-		private readonly FcmNotificationSetting _fcmNotificationSetting;
+		private readonly FcmNotificationOptions _fcmNotificationSetting;
 		private readonly NotificationRepository _repository;
 		private readonly ChildRepository _childRepository;
 		private readonly ParentRepository _parentRepository;
 
 		public NotificationService(
 
-			IOptions<FcmNotificationSetting> settings,
+			IOptions<FcmNotificationOptions> settings,
 			NotificationRepository repository,
 			ParentRepository parentRepository,
 			ChildRepository childRepository
@@ -95,7 +95,7 @@ namespace Family_GPS_Tracker_Api.Services
 								NotificationId = Guid.NewGuid(),
 								Title = notificationModel.Title,
 								Message = notificationModel.Body,
-								CreatedAt = DateTime.Now.ToString()
+								//CreatedAt = DateTime.Now.ToString()
 							};
 							notificationEntity.Parent = parent;
 							notificationEntity.Child = child;

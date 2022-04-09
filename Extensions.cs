@@ -1,4 +1,5 @@
-﻿using Family_GPS_Tracker_Api.Dtos;
+﻿using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
+using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
 using Family_GPS_Tracker_Api.Models;
 using System;
 using System.Collections.Generic;
