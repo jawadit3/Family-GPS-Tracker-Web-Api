@@ -16,8 +16,8 @@ namespace Family_GPS_Tracker_Api.Services
 	public interface INotificationService
 	{
 		Task<ResponseModel> SendNotification(NotificationModel notificationModel,
-			Guid senderId,
-			Guid receiverId);
+			Child child,
+			Parent parent);
 		ICollection<Notification> GetNotifications();
 	}
 
@@ -25,8 +25,7 @@ namespace Family_GPS_Tracker_Api.Services
 	{
 		private readonly FcmNotificationSetting _fcmNotificationSetting;
 		private readonly NotificationRepository _repository;
-		private readonly ChildRepository _childRepository;
-		private readonly ParentRepository _parentRepository;
+		
 
 		public NotificationService(
 
@@ -38,8 +37,7 @@ namespace Family_GPS_Tracker_Api.Services
 		{
 			_fcmNotificationSetting = settings.Value;
 			_repository = repository;
-			_parentRepository = parentRepository;
-			_childRepository = childRepository;
+			
 		}
 
 		public ICollection<Notification> GetNotifications()
@@ -48,8 +46,8 @@ namespace Family_GPS_Tracker_Api.Services
 		}
 
 		public async Task<ResponseModel> SendNotification(NotificationModel notificationModel,
-			Guid senderId,
-			Guid receiverId)
+			Child child,
+			Parent parent)
 		{
 			ResponseModel response = new ResponseModel();
 			try
@@ -75,6 +73,7 @@ namespace Family_GPS_Tracker_Api.Services
 					DataPayload dataPayload = new DataPayload();
 					dataPayload.Title = notificationModel.Title;
 					dataPayload.Body = notificationModel.Body;
+					dataPayload.senderName = child.Name;
 
 					GoogleNotification notification = new GoogleNotification();
 					notification.Data = dataPayload;
@@ -84,12 +83,7 @@ namespace Family_GPS_Tracker_Api.Services
 					var fcmSendResponse = await fcm.SendAsync(deviceToken, notification);
 
 					if (fcmSendResponse.IsSuccess())
-					{
-
-						var parent = _parentRepository.Get(receiverId);
-						var child = _childRepository.Get(senderId);
-						if (parent != null && child != null)
-						{
+					{		
 							var notificationEntity = new Notification
 							{
 								NotificationId = Guid.NewGuid(),
@@ -100,7 +94,7 @@ namespace Family_GPS_Tracker_Api.Services
 							notificationEntity.Parent = parent;
 							notificationEntity.Child = child;
 							_repository.CreateNotification(notificationEntity);
-						}
+	
 						response.IsSuccess = true;
 						response.Message = "Notification sent successfully";
 						return response;

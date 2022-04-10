@@ -1,6 +1,7 @@
 ﻿using Family_GPS_Tracker_Api.Models;
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +25,9 @@ namespace Family_GPS_Tracker_Api.Repositories
 
 		public ICollection<Notification> GetNotifications()
 		{
-			return _db.Notifications.ToList();
+			return _db.Notifications
+				.Include(notification => notification.Child)
+				.ToList();
 		}
 	}
 }

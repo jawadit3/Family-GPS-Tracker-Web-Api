@@ -180,6 +180,7 @@ namespace Family_GPS_Tracker_Api
 			return new NotificationDto
 			{
 				NotificationId = notification.NotificationId,
+				SenderName = notification.Child.Name,
 				Title = notification.Title,
 				Message = notification.Message,
 				CreatedAt = notification.CreatedAt

@@ -19,20 +19,25 @@ namespace Catalog.Controllers
 	{
 		private readonly INotificationService _notificationService;
 		private readonly ParentRepository _parentRepository;
+		private readonly ChildRepository _childRepository;
 
 		public NotificationController(INotificationService notificationService,
-			ParentRepository parentRepository)
+			ParentRepository parentRepository,
+			ChildRepository childRepository)
 		{
 			_notificationService = notificationService;
 			_parentRepository = parentRepository;
+			_childRepository = childRepository;
 		}
 
 		[Route("send")]
 		[HttpPost]
-		public async Task<IActionResult> SendNotification(NotificationModelDto notificationModelDto)
+		public async Task<IActionResult> SendNotification(CreateNotificationDto notificationModelDto)
 		{
 			var token = _parentRepository.GetDeviceToken(notificationModelDto.RecieverId);
-			if (token == null)
+			var parent = _parentRepository.Get(notificationModelDto.RecieverId);
+			var child = _childRepository.Get(notificationModelDto.SenderId);
+			if (token == null && child == null && parent == null)
 			{
 				NotFound();
 			}
@@ -43,7 +48,7 @@ namespace Catalog.Controllers
 				IsAndroiodDevice = notificationModelDto.IsAndroiodDevice,
 				Title = notificationModelDto.Title
 
-			}, notificationModelDto.SenderId, notificationModelDto.RecieverId);
+			}, child, parent);
 			return Ok(result);
 		}
 

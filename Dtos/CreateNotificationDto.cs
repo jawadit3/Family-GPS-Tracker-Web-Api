@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Family_GPS_Tracker_Api.Dtos
 {
-	public class NotificationModelDto
+	public class CreateNotificationDto
 	{
 
         [JsonProperty("senderId")]
