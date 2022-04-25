@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Family_GPS_Tracker_Api.Options
 {
-    public class FcmNotificationOptions
-    {
-        public string SenderId { get; set; }
-        public string ServerKey { get; set; }
-    }
+	public class JwtOptions
+	{
+		public String Secret { get; set; }
+		public TimeSpan TokenLifetime { get; internal set; }
+	}
 }

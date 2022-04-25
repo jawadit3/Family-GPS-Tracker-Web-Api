@@ -1,18 +1,21 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using static Family_GPS_Tracker_Api.Models.IdentityModels;
 
 #nullable disable
 
 namespace Family_GPS_Tracker_Api.Models
 {
-    public partial class FamilyTrackerDatabaseContext : DbContext
+    public partial class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
     {
-        public FamilyTrackerDatabaseContext()
+        public AppDbContext()
         {
         }
 
-        public FamilyTrackerDatabaseContext(DbContextOptions<FamilyTrackerDatabaseContext> options)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
@@ -22,19 +25,19 @@ namespace Family_GPS_Tracker_Api.Models
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserType> UserTypes { get; set; }
+        public virtual DbSet<ApplicationUser> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Name=FamilyTrackerDb");
+                optionsBuilder.UseSqlServer("Name=MyDb");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Child>(entity =>
             {
                 entity.ToTable("Child");
@@ -43,35 +46,24 @@ namespace Family_GPS_Tracker_Api.Models
                     .ValueGeneratedNever()
                     .HasColumnName("child_id");
 
-                entity.Property(e => e.Code)
+                entity.Property(e => e.PairingCode)
                     .HasMaxLength(10)
-                    .HasColumnName("code")
+                    .HasColumnName("pairing_code")
                     .IsFixedLength(true);
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("email");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("name");
 
                 entity.Property(e => e.ParentId).HasColumnName("parent_id");
 
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("password");
+                entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.Children)
                     .HasForeignKey(d => d.ParentId)
                     .HasConstraintName("FK_Child_Parent");
+
+                entity.HasOne(e => e.User)
+                .WithOne(d => d.Child)
+                .HasForeignKey<Child>(f => f.UserId)
+                .HasConstraintName("FK_Child_User");
             });
 
             modelBuilder.Entity<Geofence>(entity =>
@@ -194,76 +186,66 @@ namespace Family_GPS_Tracker_Api.Models
                     .IsUnicode(false)
                     .HasColumnName("device_token");
 
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("email");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("password");
-
-                entity.Property(e => e.PhoneNumber)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("phone_number");
-            });
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("User");
-
                 entity.Property(e => e.UserId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("user_id");
+                .HasColumnName("user_id");
 
-                entity.Property(e => e.ChildId).HasColumnName("child_id");
+                entity.HasOne(e => e.User)
+                .WithOne(d => d.Parent)
+                .HasForeignKey<Parent>(f => f.UserId)
+                .HasConstraintName("FK_Parent_User");
 
-                entity.Property(e => e.ParentId).HasColumnName("parent_id");
+                
 
-                entity.Property(e => e.UserTypeId).HasColumnName("user_type_id");
+                /* entity.Property(e => e.Email)
+                     .IsRequired()
+                     .HasMaxLength(50)
+                     .IsUnicode(false)
+                     .HasColumnName("email");
 
-                entity.HasOne(d => d.Child)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.ChildId)
-                    .HasConstraintName("FK_User_Child");
+                 entity.Property(e => e.Name)
+                     .IsRequired()
+                     .HasMaxLength(50)
+                     .IsUnicode(false)
+                     .HasColumnName("name");
 
-                entity.HasOne(d => d.Parent)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK_User_Parent");
+                 entity.Property(e => e.Password)
+                     .IsRequired()
+                     .HasMaxLength(50)
+                     .IsUnicode(false)
+                     .HasColumnName("password");
 
-                entity.HasOne(d => d.UserType)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.UserTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_User_UserType");
+                 entity.Property(e => e.PhoneNumber)
+                     .IsRequired()
+                     .HasMaxLength(50)
+                     .IsUnicode(false)
+                     .HasColumnName("phone_number");*/
             });
 
-            modelBuilder.Entity<UserType>(entity =>
-            {
-                entity.ToTable("UserType");
+		/*	modelBuilder.Entity<User>(entity =>
+			{
+				entity.ToTable("User");
 
-                entity.Property(e => e.UserTypeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("user_type_id");
+				entity.Property(e => e.UserId)
+					.ValueGeneratedNever()
+					.HasColumnName("user_id");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("name");
-            });
+				entity.Property(e => e.ChildId).HasColumnName("child_id");
+
+				entity.Property(e => e.ParentId).HasColumnName("parent_id");
+
+				entity.HasOne(d => d.Child)
+					.WithMany(p => p.Users)
+
+					.HasForeignKey(d => d.ChildId)
+					.HasConstraintName("FK_User_Child");
+
+				entity.HasOne(d => d.Parent)
+					.WithMany(p => p.Users)
+					.HasForeignKey(d => d.ParentId)
+					.HasConstraintName("FK_User_Parent");
+
+				
+			});*/
 
             OnModelCreatingPartial(modelBuilder);
         }

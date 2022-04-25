@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using Family_GPS_Tracker_Api.Models;
 using Family_GPS_Tracker_Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -82,3 +82,4 @@ namespace Family_GPS_Tracker_Api.Controllers
 	}
 }
 
+*/

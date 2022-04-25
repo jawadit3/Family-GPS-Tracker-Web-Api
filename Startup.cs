@@ -5,7 +5,7 @@ using CorePush.Apple;
 using CorePush.Google;
 using Family_GPS_Tracker_Api.Repositories;
 using Family_GPS_Tracker_Api.Models;
-using Family_GPS_Tracker_Api.Services;
+//using Family_GPS_Tracker_Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Family_GPS_Tracker_Api.Services.NotificationService;
+//using static Family_GPS_Tracker_Api.Services.NotificationService;
 using Family_GPS_Tracker_Api.Options;
 using Family_GPS_Tracker_Api.Installers;
 
@@ -52,10 +52,14 @@ namespace Family_GPS_Tracker_Api
 				
 			}
 
+			
+
 			var swaggerOptions = new SwaggerOptions();
 			Configuration.GetSection(nameof(swaggerOptions)).Bind(swaggerOptions);
 			app.UseSwagger(option => option.RouteTemplate = swaggerOptions.JsonRoute);
 			app.UseSwaggerUI(option => option.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description));
+
+			app.UseAuthentication();
 
 			app.UseHttpsRedirection();
 

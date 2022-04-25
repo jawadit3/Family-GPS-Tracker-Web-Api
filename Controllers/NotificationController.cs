@@ -1,4 +1,4 @@
-﻿using CatalogWebApi.Models;
+﻿/*using CatalogWebApi.Models;
 using Family_GPS_Tracker_Api;
 using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
 using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
@@ -57,3 +57,4 @@ namespace Catalog.Controllers
 
 	}
 }
+*/

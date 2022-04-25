@@ -1,8 +1,8 @@
-﻿using CatalogWebApi.Models;
+﻿/*using CatalogWebApi.Models;
 using CorePush.Google;
 using Family_GPS_Tracker_Api.Models;
 using Family_GPS_Tracker_Api.Repositories;
-using Microsoft.Extensions.Options;
+using Family_GPS_Tracker_Api.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using static CatalogWebApi.Models.GoogleNotification;
+using Microsoft.Extensions.Options;
 
 namespace Family_GPS_Tracker_Api.Services
 {
@@ -131,3 +132,4 @@ namespace Family_GPS_Tracker_Api.Services
 	}
 }
 
+*/

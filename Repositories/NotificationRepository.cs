@@ -8,9 +8,9 @@ namespace Family_GPS_Tracker_Api.Repositories
 {
 	public class NotificationRepository
 	{
-		private readonly FamilyTrackerDatabaseContext _db;
+		private readonly AppDbContext _db;
 
-		public NotificationRepository(FamilyTrackerDatabaseContext db)
+		public NotificationRepository(AppDbContext db)
 		{
 			_db = db;
 		}

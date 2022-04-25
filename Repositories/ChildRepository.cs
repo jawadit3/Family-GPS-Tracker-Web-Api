@@ -1,4 +1,4 @@
-﻿using Family_GPS_Tracker_Api.Models;
+﻿/*using Family_GPS_Tracker_Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,3 +76,4 @@ namespace Family_GPS_Tracker_Api.Repositories
 		}
 	}
 }
+*/

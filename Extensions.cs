@@ -12,7 +12,7 @@ namespace Family_GPS_Tracker_Api
 	{
 		// User Extention Methods
 
-		public static UserDto AsUserDto(this User user)
+		/*public static UserDto AsUserDto(this User user)
 		{
 
 			return new UserDto
@@ -50,7 +50,7 @@ namespace Family_GPS_Tracker_Api
 		{
 			var locationDtoList = new List<LocationDto>();
 
-			if(locationList != null)
+			if (locationList != null)
 			{
 				foreach (Location location in locationList)
 				{
@@ -69,7 +69,7 @@ namespace Family_GPS_Tracker_Api
 				return locationDtoList;
 			}
 
-			
+
 
 			return null;
 		}
@@ -87,7 +87,7 @@ namespace Family_GPS_Tracker_Api
 					email = child.Email,
 					password = child.Password,
 					parentId = child.ParentId
-					
+
 
 				};
 			}
@@ -128,7 +128,7 @@ namespace Family_GPS_Tracker_Api
 			}
 
 			return childDtoList;
-		}
+		}*/
 
 		// Parent Extension Methods
 
@@ -138,11 +138,10 @@ namespace Family_GPS_Tracker_Api
 			{
 				return new ParentDto()
 				{
-					parentId = parent.ParentId,
-					name = parent.Name,
-					email = parent.Email,
-					password = parent.Password,
-					phoneNumber = parent.PhoneNumber,
+					UserId = parent.UserId,
+					name = parent.User.UserName,
+					email = parent.User.Email,
+					phoneNumber = parent.User.PhoneNumber,
 					deviceToken = parent.DeviceToken
 
 				};
@@ -150,7 +149,7 @@ namespace Family_GPS_Tracker_Api
 			return null;
 		}
 
-		public static ParentDetailDto AsParentDetailDto(this Parent parent)
+		/*public static ParentDetailDto AsParentDetailDto(this Parent parent)
 		{
 			return new ParentDetailDto
 			{
@@ -200,6 +199,6 @@ namespace Family_GPS_Tracker_Api
 			}
 
 			return notificationDtoList;
-		}
+		}*/
 	}
 }

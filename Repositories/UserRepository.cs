@@ -1,4 +1,4 @@
-﻿using Family_GPS_Tracker_Api.Models;
+﻿/*using Family_GPS_Tracker_Api.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -40,3 +40,4 @@ namespace Family_GPS_Tracker_Api.Repositories
 		}
 	}
 }
+*/

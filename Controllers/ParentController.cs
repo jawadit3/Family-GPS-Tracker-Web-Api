@@ -4,23 +4,28 @@ using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
 using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Family_GPS_Tracker_Api.Contracts;
+using System.Threading.Tasks;
 
 namespace Family_GPS_Tracker_Api.Controllers
 {
+
 	[ApiController]
-	[Route("parent")]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class ParentController : ControllerBase
 	{
-		private ParentRepository _repository;
-		public ParentController(ParentRepository repository)
+		private IParentRepository _parentRepository;
+		public ParentController(IParentRepository parentRepository)
 		{
-			_repository = repository;
+			_parentRepository = parentRepository;
 		}
 
-		[HttpGet("{id}")]
-		public ActionResult<ParentDto> GetParent(Guid id)
+		[HttpGet(ApiRoutes.Parent.Get)]
+		public async Task<ActionResult<ParentDto>> GetParentById([FromRoute] Guid userId)
 		{
-			Parent parent = _repository.Get(id);
+			Parent parent = await _parentRepository.GetParentByIdAsync(userId);
 			if (parent is null)
 			{
 				return NotFound();
@@ -28,7 +33,7 @@ namespace Family_GPS_Tracker_Api.Controllers
 			return parent.AsParentDto();
 		}
 
-		[HttpGet("details/{id}")]
+		/*[HttpGet("details/{id}")]
 		public ActionResult<ParentDetailDto> GetParentDetails(Guid id)
 		{
 			Parent parent = _repository.GetDetails(id);
@@ -66,6 +71,6 @@ namespace Family_GPS_Tracker_Api.Controllers
 				return NotFound();
 			}
 			return _repository.UpdateDeviceToken(parent, deviceTokenDto).AsParentDto();
-		}
+		}*/
 	}
 }

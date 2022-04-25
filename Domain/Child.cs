@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using static Family_GPS_Tracker_Api.Models.IdentityModels;
 
 #nullable disable
 
@@ -12,20 +14,18 @@ namespace Family_GPS_Tracker_Api.Models
             Geofences = new HashSet<Geofence>();
             Locations = new HashSet<Location>();
             Notifications = new HashSet<Notification>();
-            Users = new HashSet<User>();
+            User = new ApplicationUser();
         }
 
         public Guid ChildId { get; set; }
         public Guid? ParentId { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Code { get; set; }
+        public Guid UserId { get; set; }
+        public string PairingCode { get; set; }
 
         public virtual Parent Parent { get; set; }
         public virtual ICollection<Geofence> Geofences { get; set; }
         public virtual ICollection<Location> Locations { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

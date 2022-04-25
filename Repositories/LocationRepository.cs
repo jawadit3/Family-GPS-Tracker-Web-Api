@@ -9,9 +9,9 @@ namespace Family_GPS_Tracker_Api.Repositories
 {
 	public class LocationRepository
 	{
-		private readonly FamilyTrackerDatabaseContext _db;
+		private readonly AppDbContext _db;
 
-		public LocationRepository(FamilyTrackerDatabaseContext db)
+		public LocationRepository(AppDbContext db)
 		{
 			_db = db;
 		}
