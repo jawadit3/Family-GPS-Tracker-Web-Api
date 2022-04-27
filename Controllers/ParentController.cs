@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Family_GPS_Tracker_Api.Contracts;
 using System.Threading.Tasks;
+using Family_GPS_Tracker_Api.Domain;
+using Family_GPS_Tracker_Api.Contracts.V1.DTOs.Responses;
 
 namespace Family_GPS_Tracker_Api.Controllers
 {
@@ -28,49 +30,50 @@ namespace Family_GPS_Tracker_Api.Controllers
 			Parent parent = await _parentRepository.GetParentByIdAsync(userId);
 			if (parent is null)
 			{
-				return NotFound();
+				return NotFound(new { message = "Parent doesn't exist with this userId" });
 			}
 			return parent.AsParentDto();
 		}
 
-		/*[HttpGet("details/{id}")]
-		public ActionResult<ParentDetailDto> GetParentDetails(Guid id)
+		[HttpGet(ApiRoutes.Parent.GetDetails)]
+		public async Task<ActionResult<ParentDetailDto>> GetParentDetailsById([FromRoute] Guid userId)
 		{
-			Parent parent = _repository.GetDetails(id);
+			Parent parent = await _parentRepository.GetParentDetailsByIdAsync(userId);
 			if (parent is null)
 			{
-				return NotFound();
+				return NotFound(new { message = "Parent doesn't exist with this userId" });
 			}
 
 			return parent.AsParentDetailDto();
 		}
 
-		[HttpPost("register")]
-		public ActionResult<ParentDto> CreateParent(CreateParentDto dto)
+		
+
+		[HttpPut(ApiRoutes.Parent.UpdateToken)]
+		public async Task<ActionResult<DeviceTokenResponse>> UpdateDeviceToken([FromRoute] Guid userId, [FromBody] UpdateDeviceTokenRequest updateDeviceTokenRequest)
 		{
-
-			Parent parent = new Parent()
-			{
-				ParentId = Guid.NewGuid(),
-				Name = dto.Name,
-				Email = dto.Email,
-				Password = dto.Password,
-				PhoneNumber = dto.PhoneNumber
-			};
-
-			_repository.CreateParent(parent);
-			return CreatedAtAction(nameof(GetParent), new { id = parent.ParentId }, parent.AsParentDto());
-		}
-
-		[HttpPut("token/{id}")]
-		public ActionResult<ParentDto> UpdateDeviceToken(Guid id, String deviceTokenDto)
-		{
-			var parent = _repository.Get(id);
+			var parent = await _parentRepository.GetParentByIdAsync(userId);
 			if (parent == null)
 			{
-				return NotFound();
+				return NotFound(new { message = "Parent doesn't exist with this userId"});
 			}
-			return _repository.UpdateDeviceToken(parent, deviceTokenDto).AsParentDto();
-		}*/
+
+			if (!userId.ToString().Equals(HttpContext.GetUserId())) {
+
+				return BadRequest(new { message = "You cannot perform this operation" });
+			}
+
+			var deviceToken = new DeviceToken
+			{
+				Token = updateDeviceTokenRequest.Token
+			};
+			var isDeviceTokenUpdated  = await _parentRepository.UpdateDeviceTokenAsync(parent, deviceToken);
+
+			if (!isDeviceTokenUpdated) {
+				return BadRequest(new { message = "Token couldn't be updated" });
+			}
+
+			return Ok(deviceToken.AsDeviceTokenResponse());
+		}
 	}
 }

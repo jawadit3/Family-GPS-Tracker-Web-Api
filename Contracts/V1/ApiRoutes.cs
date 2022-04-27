@@ -13,8 +13,8 @@ namespace Family_GPS_Tracker_Api.Contracts
 
 		public static class Parent {
 			public const string Get = Base + "/parent/{userId}";
-			public const string GetDetails = Base + "/parent/details";
-			public const string UpdateToken = Base + "/parent/updateToken";
+			public const string GetDetails = Base + "/parent/details/{userId}";
+			public const string UpdateToken = Base + "/parent/updateToken/{userId}";
 		}
 
 		public static class Child

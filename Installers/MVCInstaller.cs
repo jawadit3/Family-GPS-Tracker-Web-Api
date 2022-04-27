@@ -30,8 +30,9 @@ namespace Family_GPS_Tracker_Api.Installers
 				IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtOptions.Secret)),
 				ValidateIssuer = false,
 				ValidateAudience = false,
-				RequireExpirationTime = false,
-				ValidateLifetime = true
+				RequireExpirationTime = true,
+				ValidateLifetime = true,
+				ClockSkew = TimeSpan.Zero
 			};
 
 			services.AddSingleton(tokenValidationParameter);

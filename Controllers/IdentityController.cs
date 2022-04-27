@@ -145,9 +145,9 @@ namespace Family_GPS_Tracker_Api.Controllers
 			});
 		}
 
-		// Handling Login Request
+		// Handling Refresh Token Request
 
-		[HttpPost(ApiRoutes.Identity.Login)]
+		[HttpPost(ApiRoutes.Identity.RefreshToken)]
 		public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
 		{
 			// Checking if user exists

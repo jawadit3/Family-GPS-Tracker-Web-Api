@@ -1,4 +1,5 @@
 ﻿using System;
+using Family_GPS_Tracker_Api.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,11 @@ namespace Family_GPS_Tracker_Api.Models
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
         public virtual DbSet<ApplicationUser> Users { get; set; }
+        public virtual DbSet<ApplicationRole> Roles { get; set; }
+        public virtual DbSet<ApplicationUserRole> UserRoles { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -65,6 +70,25 @@ namespace Family_GPS_Tracker_Api.Models
                 .HasForeignKey<Child>(f => f.UserId)
                 .HasConstraintName("FK_Child_User");
             });
+
+            modelBuilder.Entity<ApplicationUserRole>(entity =>
+            {
+
+                entity.HasKey(sc => new { sc.UserId, sc.RoleId });
+
+                entity.HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId)
+                /*.OnDelete(DeleteBehavior.ClientSetNull)*/;
+
+                entity.HasOne(ur => ur.Role)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
+
+            });
+
+          
+
 
             modelBuilder.Entity<Geofence>(entity =>
             {

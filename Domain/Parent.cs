@@ -22,6 +22,7 @@ namespace Family_GPS_Tracker_Api.Models
         public virtual ICollection<Child> Children { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ApplicationUser User { get; set; }
+        
 
     }
 }

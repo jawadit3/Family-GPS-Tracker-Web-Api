@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Family_GPS_Tracker_Api.Contracts.V1.RequestDtos
 {
-	public class UpdateDeviceTokenDto
+	public class UpdateDeviceTokenRequest
 	{
-		public String token { get; set; }
+		public String Token { get; set; }
 	}
 }

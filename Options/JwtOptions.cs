@@ -8,6 +8,6 @@ namespace Family_GPS_Tracker_Api.Options
 	public class JwtOptions
 	{
 		public String Secret { get; set; }
-		public TimeSpan TokenLifetime { get; internal set; }
+		public TimeSpan TokenLifetime { get; set; }
 	}
 }

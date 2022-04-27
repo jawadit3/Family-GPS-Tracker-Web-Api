@@ -19,6 +19,36 @@ namespace Family_GPS_Tracker_Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Domain.RefreshToken", b =>
+                {
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsInvalidated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JwtId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Token");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.Child", b =>
                 {
                     b.Property<Guid>("ChildId")
@@ -85,7 +115,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("Geofence");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationRole", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -113,7 +143,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationRoleClaim", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationRoleClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,7 +166,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -202,7 +232,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserClaim", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -225,7 +255,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserLogin", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -246,7 +276,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserRole", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -261,7 +291,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserToken", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserToken", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -386,6 +416,17 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.ToTable("Parent");
                 });
 
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.Child", b =>
                 {
                     b.HasOne("Family_GPS_Tracker_Api.Models.Parent", "Parent")
@@ -393,7 +434,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                         .HasForeignKey("ParentId")
                         .HasConstraintName("FK_Child_Parent");
 
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", "User")
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", "User")
                         .WithOne("Child")
                         .HasForeignKey("Family_GPS_Tracker_Api.Models.Child", "UserId")
                         .HasConstraintName("FK_Child_User")
@@ -416,51 +457,55 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.Navigation("Child");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationRoleClaim", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationRoleClaim", b =>
                 {
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationRole", null)
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserClaim", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserClaim", b =>
                 {
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", null)
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserLogin", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserLogin", b =>
                 {
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", null)
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserRole", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserRole", b =>
                 {
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationRole", null)
-                        .WithMany()
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationRole", "Role")
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", null)
-                        .WithMany()
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", "User")
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUserToken", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUserToken", b =>
                 {
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", null)
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -499,7 +544,7 @@ namespace Family_GPS_Tracker_Api.Migrations
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.Parent", b =>
                 {
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", "User")
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", "User")
                         .WithOne("Parent")
                         .HasForeignKey("Family_GPS_Tracker_Api.Models.Parent", "UserId")
                         .HasConstraintName("FK_Parent_User")
@@ -518,11 +563,18 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.Navigation("Notifications");
                 });
 
-            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModel+ApplicationUser", b =>
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationRole", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", b =>
                 {
                     b.Navigation("Child");
 
                     b.Navigation("Parent");
+
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.Parent", b =>

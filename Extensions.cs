@@ -1,10 +1,14 @@
-﻿using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
+﻿using Family_GPS_Tracker_Api.Contracts.V1.DTOs.Responses;
+using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
 using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
+using Family_GPS_Tracker_Api.Domain;
 using Family_GPS_Tracker_Api.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Family_GPS_Tracker_Api.Models.IdentityModels;
 
 namespace Family_GPS_Tracker_Api
 {
@@ -108,7 +112,7 @@ namespace Family_GPS_Tracker_Api
 
 			};
 		}
-
+*/
 		public static IEnumerable<ChildDto> AsChildDtoList(
 			this ICollection<Child> children)
 		{
@@ -119,16 +123,15 @@ namespace Family_GPS_Tracker_Api
 
 				childDtoList.Add(new ChildDto
 				{
-					childId = child.ChildId,
-					name = child.Name,
-					email = child.Email,
-					password = child.Password
+					UserId = child.UserId,
+					Name = child.User.UserName,
+					Email = child.User.Email
 
 				});
 			}
 
 			return childDtoList;
-		}*/
+		}
 
 		// Parent Extension Methods
 
@@ -139,32 +142,47 @@ namespace Family_GPS_Tracker_Api
 				return new ParentDto()
 				{
 					UserId = parent.UserId,
-					name = parent.User.UserName,
-					email = parent.User.Email,
-					phoneNumber = parent.User.PhoneNumber,
-					deviceToken = parent.DeviceToken
+					Name = parent.User.UserName,
+					Email = parent.User.Email,
+					PhoneNumber = parent.User.PhoneNumber,
+					Roles = parent.User.UserRoles.AsRoleDtoList(),
 
 				};
 			}
 			return null;
 		}
 
-		/*public static ParentDetailDto AsParentDetailDto(this Parent parent)
+		public static ParentDetailDto AsParentDetailDto(this Parent parent)
 		{
 			return new ParentDetailDto
 			{
-				parentId = parent.ParentId,
-				name = parent.Name,
-				email = parent.Email,
-				password = parent.Password,
-				phoneNumber = parent.PhoneNumber,
-				children = parent.Children.AsChildDtoList()
+				UserId = parent.UserId,
+				Name = parent.User.UserName,
+				Email = parent.User.Email,
+				PhoneNumber = parent.User.PhoneNumber,
+				Roles = parent.User.UserRoles.AsRoleDtoList(),
+				Children = parent.Children.AsChildDtoList()
 
 			};
 		}
 
+		public static IEnumerable<String> AsRoleDtoList(this IEnumerable<ApplicationUserRole> userRoles)
+		{
+			var newRoles = new List<String>();
+			if (userRoles != null) {
+				foreach (var userRole in userRoles)
+				{
+					newRoles.Add(userRole.Role.Name);
+				}
+				return newRoles;
+			}
+
+			return null;
+		}
+
 		// PairingCode Extension Methods
 
+		/*
 		public static PairingCodeDto AsPairingCodeDto(this String pairingCode)
 		{
 			return new PairingCodeDto
@@ -200,5 +218,28 @@ namespace Family_GPS_Tracker_Api
 
 			return notificationDtoList;
 		}*/
+
+		public static string GetUserId(this HttpContext httpContext) {
+
+			if (httpContext.User == null) {
+				return string.Empty;
+			}
+
+			return httpContext.User.Claims.Single(x => x.Type == "userId").Value;
+		}
+		public static DeviceTokenResponse AsDeviceTokenResponse(this DeviceToken deviceToken)
+		{
+
+			if (deviceToken != null)
+			{
+				return new DeviceTokenResponse
+				{
+					Token = deviceToken.Token
+				};
+			}
+
+			return null;
+		}
+
 	}
 }
