@@ -64,3 +64,9 @@ C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Re
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\Family GPS Tracker Api.pdb
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\Family GPS Tracker Api.genruntimeconfig.cache
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\obj\Release\net5.0\Family GPS Tracker Api.csproj.AssemblyReference.cache
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\AutoMapper.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\Microsoft.Extensions.Options.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\System.Runtime.CompilerServices.Unsafe.dll

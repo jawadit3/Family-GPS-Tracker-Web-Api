@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Family_GPS_Tracker_Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220427173845_added-identity")]
-    partial class addedidentity
+    [Migration("20220428185933_Added-Identity")]
+    partial class AddedIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,35 @@ namespace Family_GPS_Tracker_Api.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Domain.PairingCode", b =>
+                {
+                    b.Property<Guid>("PairingCodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChildId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.HasKey("PairingCodeId");
+
+                    b.HasIndex("ChildId")
+                        .IsUnique();
+
+                    b.ToTable("PairingCode");
+                });
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Domain.RefreshToken", b =>
                 {
@@ -48,35 +77,22 @@ namespace Family_GPS_Tracker_Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshToken");
                 });
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.Child", b =>
                 {
                     b.Property<Guid>("ChildId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("child_id");
-
-                    b.Property<string>("PairingCode")
-                        .HasMaxLength(10)
-                        .HasColumnType("nchar(10)")
-                        .HasColumnName("pairing_code")
-                        .IsFixedLength(true);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("parent_id");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("ChildId");
+                    b.HasKey("ChildId")
+                        .HasName("child_id");
 
                     b.HasIndex("ParentId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Child");
                 });
@@ -397,8 +413,7 @@ namespace Family_GPS_Tracker_Api.Migrations
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.Parent", b =>
                 {
                     b.Property<Guid>("ParentId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("parent_id");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DeviceToken")
                         .HasMaxLength(220)
@@ -406,16 +421,22 @@ namespace Family_GPS_Tracker_Api.Migrations
                         .HasColumnType("varchar(220)")
                         .HasColumnName("device_token");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("ParentId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasKey("ParentId")
+                        .HasName("parent_id");
 
                     b.ToTable("Parent");
+                });
+
+            modelBuilder.Entity("Family_GPS_Tracker_Api.Domain.PairingCode", b =>
+                {
+                    b.HasOne("Family_GPS_Tracker_Api.Models.Child", "Child")
+                        .WithOne("PairingCode")
+                        .HasForeignKey("Family_GPS_Tracker_Api.Domain.PairingCode", "ChildId")
+                        .HasConstraintName("FK_PairingCode_Child")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Child");
                 });
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Domain.RefreshToken", b =>
@@ -431,17 +452,17 @@ namespace Family_GPS_Tracker_Api.Migrations
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.Child", b =>
                 {
+                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", "User")
+                        .WithOne("Child")
+                        .HasForeignKey("Family_GPS_Tracker_Api.Models.Child", "ChildId")
+                        .HasConstraintName("FK_Child_User")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Family_GPS_Tracker_Api.Models.Parent", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .HasConstraintName("FK_Child_Parent");
-
-                    b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", "User")
-                        .WithOne("Child")
-                        .HasForeignKey("Family_GPS_Tracker_Api.Models.Child", "UserId")
-                        .HasConstraintName("FK_Child_User")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Parent");
 
@@ -548,7 +569,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                 {
                     b.HasOne("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationUser", "User")
                         .WithOne("Parent")
-                        .HasForeignKey("Family_GPS_Tracker_Api.Models.Parent", "UserId")
+                        .HasForeignKey("Family_GPS_Tracker_Api.Models.Parent", "ParentId")
                         .HasConstraintName("FK_Parent_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -563,6 +584,8 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.Navigation("Locations");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("PairingCode");
                 });
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Models.IdentityModels+ApplicationRole", b =>

@@ -3,11 +3,10 @@ using Family_GPS_Tracker_Api.Repositories;
 using CatalogWebApi.Models;
 using CorePush.Apple;
 using CorePush.Google;
-using Family_GPS_Tracker_Api.Repositories;
-using Family_GPS_Tracker_Api.Models;
+
 //using Family_GPS_Tracker_Api.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Builder;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +39,7 @@ namespace Family_GPS_Tracker_Api
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.InstallServicesInAssembly(Configuration);
+			services.AddAutoMapper(typeof(Startup));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

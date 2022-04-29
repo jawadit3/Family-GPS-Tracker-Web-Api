@@ -54,23 +54,7 @@ namespace Family_GPS_Tracker_Api.Controllers
 				});
 			}
 
-			// Creating parent corresponding to that user 
-
-			Parent parent = new Parent {
-				ParentId = Guid.NewGuid(),
-				DeviceToken = "empty",
-				User = applicationUser
-			};
-
-			var isParentCreated = await _parentRepository.CreateParentAsync(parent);
-
-			if (!isParentCreated) {
-				return BadRequest(new AuthFailedResponse
-				{
-					Errors = new[] { "This operation was unsuccessful" }
-				});
-			}
-
+			
 			// Returning Token on successfull registration
 
 			return Ok(new AuthSuccessResponse { 

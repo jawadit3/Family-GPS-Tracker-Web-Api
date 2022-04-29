@@ -31,7 +31,7 @@ namespace Family_GPS_Tracker_Api.Installers
 				ValidateIssuer = false,
 				ValidateAudience = false,
 				RequireExpirationTime = true,
-				ValidateLifetime = true,
+				ValidateLifetime = false,
 				ClockSkew = TimeSpan.Zero
 			};
 
@@ -45,43 +45,7 @@ namespace Family_GPS_Tracker_Api.Installers
 					x.SaveToken = true;
 					x.TokenValidationParameters = tokenValidationParameter;
 				});
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Family_GPS_Tracker_Api", Version = "v1" });
-				/*var security = new Dictionary<String, IEnumerable<String>> {
-					{"Bearer",new String[0] }
-				};
-				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
-					Description = "Jwt Authorization Header using Bearer Scheme",
-					Name = "Authorization",
-					In = "header",
-					Type = "apiKey"
-				});*/
-
-				c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-				{
-					Description = "JWT Authorization",
-					Name = "Authorization",
-					In = ParameterLocation.Header,
-					Type = SecuritySchemeType.ApiKey,
-					Scheme = "Bearer",
-					BearerFormat = "JWT"
-				});
-				c.AddSecurityRequirement(new OpenApiSecurityRequirement
-					{
-						{
-							new OpenApiSecurityScheme
-							{
-								Reference = new OpenApiReference
-								{
-									Type = ReferenceType.SecurityScheme,
-									Id = "Bearer"
-								}
-							},
-							Array.Empty<string>()
-						}
-					});
-			});
+			
 
 			
 			services.AddControllersWithViews()

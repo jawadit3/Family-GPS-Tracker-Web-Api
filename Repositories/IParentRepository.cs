@@ -9,9 +9,9 @@ namespace Family_GPS_Tracker_Api.Repositories
 {
 	public interface IParentRepository
 	{
-		public Task<Parent> GetParentByIdAsync(Guid userId);
+		public Task<Parent> GetParentByIdAsync(Guid parentId);
 		public Task<bool> CreateParentAsync(Parent parent);
-		public Task<Parent> GetParentDetailsByIdAsync(Guid userId);
+		public Task<Parent> GetParentDetailsByIdAsync(Guid parentId);
 		public Task<bool> UpdateDeviceTokenAsync(Parent parent, DeviceToken deviceToken);
 	}
 }

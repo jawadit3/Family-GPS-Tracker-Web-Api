@@ -27,9 +27,10 @@ namespace Family_GPS_Tracker_Api.Models
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-        public virtual DbSet<ApplicationUser> Users { get; set; }
-        public virtual DbSet<ApplicationRole> Roles { get; set; }
-        public virtual DbSet<ApplicationUserRole> UserRoles { get; set; }
+		public virtual DbSet<ApplicationUser> Users { get; set; }
+		public virtual DbSet<ApplicationRole> Roles { get; set; }
+		public virtual DbSet<ApplicationUserRole> UserRoles { get; set; }
+        public virtual DbSet<PairingCode> PairingCodes { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -47,18 +48,10 @@ namespace Family_GPS_Tracker_Api.Models
             {
                 entity.ToTable("Child");
 
-                entity.Property(e => e.ChildId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("child_id");
-
-                entity.Property(e => e.PairingCode)
-                    .HasMaxLength(10)
-                    .HasColumnName("pairing_code")
-                    .IsFixedLength(true);
-
+                entity.HasKey(e => e.ChildId)
+                .HasName("child_id");
+     
                 entity.Property(e => e.ParentId).HasColumnName("parent_id");
-
-                entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.HasOne(d => d.Parent)
                     .WithMany(p => p.Children)
@@ -67,8 +60,20 @@ namespace Family_GPS_Tracker_Api.Models
 
                 entity.HasOne(e => e.User)
                 .WithOne(d => d.Child)
-                .HasForeignKey<Child>(f => f.UserId)
+                .HasForeignKey<Child>(f => f.ChildId)
                 .HasConstraintName("FK_Child_User");
+            });
+
+            modelBuilder.Entity<PairingCode>(entity =>
+            {
+                entity.ToTable("PairingCode");
+                entity.Property(e => e.PairingCodeId)
+                .ValueGeneratedOnAdd();
+                entity.HasOne(e => e.Child)
+                .WithOne(c => c.PairingCode)
+                .HasForeignKey<PairingCode>(p => p.ChildId)
+                .HasConstraintName("FK_PairingCode_Child");
+
             });
 
             modelBuilder.Entity<ApplicationUserRole>(entity =>
@@ -121,6 +126,10 @@ namespace Family_GPS_Tracker_Api.Models
                     .HasForeignKey(d => d.ChildId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Geofence_Child");
+            });
+
+            modelBuilder.Entity<RefreshToken>(entity => {
+                entity.ToTable("RefreshToken");
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -201,21 +210,17 @@ namespace Family_GPS_Tracker_Api.Models
             {
                 entity.ToTable("Parent");
 
-                entity.Property(e => e.ParentId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("parent_id");
+                entity.HasKey(e => e.ParentId)
+                    .HasName("parent_id");
 
                 entity.Property(e => e.DeviceToken)
                     .HasMaxLength(220)
                     .IsUnicode(false)
                     .HasColumnName("device_token");
 
-                entity.Property(e => e.UserId)
-                .HasColumnName("user_id");
-
                 entity.HasOne(e => e.User)
                 .WithOne(d => d.Parent)
-                .HasForeignKey<Parent>(f => f.UserId)
+                .HasForeignKey<Parent>(f => f.ParentId)
                 .HasConstraintName("FK_Parent_User");
 
                 

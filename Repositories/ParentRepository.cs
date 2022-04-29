@@ -15,6 +15,7 @@ namespace Family_GPS_Tracker_Api.Repositories
 	{
 		private readonly AppDbContext _db;
 
+
 		public ParentRepository(AppDbContext db)
 		{
 			_db = db;
@@ -27,23 +28,23 @@ namespace Family_GPS_Tracker_Api.Repositories
 			return created > 0;
 		}
 
-		public async Task<Parent> GetParentByIdAsync(Guid userId)
+		public async Task<Parent> GetParentByIdAsync(Guid parentId)
 		{
 			return await _db.Parents
 				.Include(parent => parent.User)
 				.ThenInclude(user => user.UserRoles)
 				.ThenInclude(userRoles => userRoles.Role)
-				.SingleOrDefaultAsync(x => x.UserId == userId);
+				.FirstOrDefaultAsync(x => x.ParentId == parentId);
 		}
 
-		public async Task<Parent> GetParentDetailsByIdAsync(Guid userId)
+		public async Task<Parent> GetParentDetailsByIdAsync(Guid parentId)
 		{
 			return await _db.Parents
 				.Include(parent => parent.Children)
 				.Include(parent => parent.User)
 				.ThenInclude(user => user.UserRoles)
 				.ThenInclude(userRoles => userRoles.Role)
-				.SingleOrDefaultAsync(parent => parent.UserId == userId);
+				.FirstOrDefaultAsync(parent => parent.ParentId == parentId);
 
 
 		}

@@ -1,23 +1,71 @@
-﻿/*using Family_GPS_Tracker_Api.Models;
+﻿using Family_GPS_Tracker_Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Family_GPS_Tracker_Api.Domain;
 
 namespace Family_GPS_Tracker_Api.Repositories
 {
-	public class ChildRepository
+	public class ChildRepository : IChildRepository
 	{
-		private readonly FamilyTrackerDatabaseContext _db;
+		private readonly AppDbContext _db;
 
-		public ChildRepository(FamilyTrackerDatabaseContext db)
+		public ChildRepository(AppDbContext db)
 		{
 			_db = db;
 		}
 
+		public async Task<bool> CreateChildAsync(Child child)
+		{
+			await _db.Children.AddAsync(child);
+			var created = await _db.SaveChangesAsync();
+			return created > 0;
+		}
 
-		public Child Get(Guid id)
+		public Task<bool> CreatePairingCodeAsync(Guid childId, PairingCode pairingCode)
+		{
+			pairingCode
+			await _db.PairingCodes.AddAsync(child);
+			var created = await _db.SaveChangesAsync();
+			return created > 0;
+		}
+
+		public async Task<Child> GetChildByIdAsync(Guid childId)
+		{
+			return await _db.Children
+				.Include(child => child.User)
+				.ThenInclude(user => user.UserRoles)
+				.ThenInclude(userRoles => userRoles.Role)
+				.FirstOrDefaultAsync(child => child.ChildId == childId);
+		}
+
+		public async Task<Child> GetChildDetailsByIdAsync(Guid childId)
+		{
+			return await _db.Children
+				.Include(c => c.Parent)
+				.Include(c => c.PairingCode)
+				.FirstOrDefaultAsync(x => x.ChildId == childId);
+		}
+
+		public async Task<PairingCode> GetPairingCodeAsync(Guid childId)
+		{
+			return await _db.PairingCodes.FirstOrDefaultAsync(x => x.ChildId == childId);
+		}
+
+		public async Task<bool> UpdatePairingCodeAsync(Guid childId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<bool> UpdatePairingCodeAsync(Guid childId, PairingCode pairingCode)
+		{
+			throw new NotImplementedException();
+		}
+
+
+		/*public Child Get(Guid id)
 		{
 			return _db.Children.SingleOrDefault(child => child.ChildId == id);
 		}
@@ -73,7 +121,6 @@ namespace Family_GPS_Tracker_Api.Repositories
 			_db.SaveChanges();
 			return child.Code;
 
-		}
+		}*/
 	}
 }
-*/

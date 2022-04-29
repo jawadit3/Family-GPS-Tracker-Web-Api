@@ -9,8 +9,8 @@ namespace Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos
 	public class UserDto
 	{
 		public Guid userId { get; set; }
-		public ParentDto parent { get; set; }
-		public ChildDto child { get; set; }
+		public ParentResponse parent { get; set; }
+		public ChildResponse child { get; set; }
 		public string userType { get; set; }
 
 	}

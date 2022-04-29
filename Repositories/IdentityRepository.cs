@@ -21,16 +21,20 @@ namespace Family_GPS_Tracker_Api.Repositories
 		private readonly JwtOptions _jwtOptions;
 		private readonly TokenValidationParameters _tokenValidationParameters;
 		private readonly AppDbContext _db;
+		private readonly IParentRepository _parentRepository;
+		private readonly IChildRepository _childRepository;
 
 
 
-		public IdentityRepository(UserManager<ApplicationUser> userManager, JwtOptions jwtOptions, TokenValidationParameters tokenValidationParameters, AppDbContext db, RoleManager<ApplicationRole> roleManager)
+		public IdentityRepository(UserManager<ApplicationUser> userManager, JwtOptions jwtOptions, TokenValidationParameters tokenValidationParameters, AppDbContext db, RoleManager<ApplicationRole> roleManager, IParentRepository parentRepository, IChildRepository childRepository)
 		{
 			_userManager = userManager;
 			_jwtOptions = jwtOptions;
 			_tokenValidationParameters = tokenValidationParameters;
 			_db = db;
 			_roleManager = roleManager;
+			_parentRepository = parentRepository;
+			_childRepository = childRepository;
 		}
 
 		public async Task<AuthResult> LoginAsync(string email, string password)
@@ -122,7 +126,8 @@ namespace Family_GPS_Tracker_Api.Repositories
 				}
 				return principal;
 			}
-			catch {
+			catch(Exception e) {
+				var error = e.Message.ToString();
 				return null;
 			}
 		}
@@ -165,7 +170,24 @@ namespace Family_GPS_Tracker_Api.Repositories
 
 			// Assigning user roles
 
-			await AddUserToRolesAsync(user, UserRoles.Parent);
+			await AddUserToRolesAsync(user, UserRoles.Child);
+
+			// Creating Child corresponding to that user
+
+			Child child = new Child
+			{
+				User = user
+			};
+
+			var isChildCreated = await _childRepository.CreateChildAsync(child);
+
+			if (!isChildCreated)
+			{
+				return new AuthResult
+				{
+					Errors = new[] { "Couldn't register user as a child" }
+				};
+			}
 
 			// Returning token on successful registration
 
@@ -204,6 +226,24 @@ namespace Family_GPS_Tracker_Api.Repositories
 			// Assigning user roles
 
 			await AddUserToRolesAsync(user,UserRoles.Parent);
+
+			// Creating Parent corresponding to this user
+
+			Parent parent = new Parent
+			{
+				DeviceToken = "empty",
+				User = user
+			};
+
+			var isParentCreated = await _parentRepository.CreateParentAsync(parent);
+
+			if (!isParentCreated)
+			{
+				return new AuthResult
+				{
+					Errors = new[] { "Couldn't register user as a parent" }
+				};
+			}
 
 			// Returning token on successful registration
 

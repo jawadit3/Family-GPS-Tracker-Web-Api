@@ -28,7 +28,7 @@ namespace Family_GPS_Tracker_Api.Installers
 			.AddDefaultTokenProviders();
 			/*services.AddScoped<UserRepository, UserRepository>();*/
 			services.AddScoped<IParentRepository, ParentRepository>();
-			/*services.AddScoped<ChildRepository, ChildRepository>();*/
+			services.AddScoped<IChildRepository, ChildRepository>();
 			services.AddScoped<LocationRepository, LocationRepository>();
 			services.AddScoped<IIdentityRepository,IdentityRepository>();
 			services.AddScoped<NotificationRepository, NotificationRepository>();

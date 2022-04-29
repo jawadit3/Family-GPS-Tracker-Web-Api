@@ -112,18 +112,18 @@ namespace Family_GPS_Tracker_Api
 
 			};
 		}
-*/
-		public static IEnumerable<ChildDto> AsChildDtoList(
+		*/
+		public static IEnumerable<ChildResponse> AsChildDtoList(
 			this ICollection<Child> children)
 		{
-			var childDtoList = new List<ChildDto>();
+			var childDtoList = new List<ChildResponse>();
 
 			foreach (Child child in children)
 			{
 
-				childDtoList.Add(new ChildDto
+				childDtoList.Add(new ChildResponse
 				{
-					UserId = child.UserId,
+					ChildId = child.ChildId,
 					Name = child.User.UserName,
 					Email = child.User.Email
 
@@ -135,17 +135,19 @@ namespace Family_GPS_Tracker_Api
 
 		// Parent Extension Methods
 
-		public static ParentDto AsParentDto(this Parent parent)
+		public static ParentResponse AsParentDto(this Parent parent)
 		{
 			if (parent != null)
 			{
-				return new ParentDto()
+				return new ParentResponse()
 				{
-					UserId = parent.UserId,
+					ParentId = parent.ParentId,
 					Name = parent.User.UserName,
 					Email = parent.User.Email,
 					PhoneNumber = parent.User.PhoneNumber,
-					Roles = parent.User.UserRoles.AsRoleDtoList(),
+					Roles = parent.User.UserRoles
+					.Select(ur => ur.Role).ToList()
+					.Select(r => r.Name).ToList(),
 
 				};
 			}
@@ -156,11 +158,13 @@ namespace Family_GPS_Tracker_Api
 		{
 			return new ParentDetailDto
 			{
-				UserId = parent.UserId,
+				ParentId = parent.ParentId,
 				Name = parent.User.UserName,
 				Email = parent.User.Email,
 				PhoneNumber = parent.User.PhoneNumber,
-				Roles = parent.User.UserRoles.AsRoleDtoList(),
+				Roles = parent.User.UserRoles
+				.Select(ur => ur.Role).ToList()
+				.Select(r => r.Name).ToList(),
 				Children = parent.Children.AsChildDtoList()
 
 			};
@@ -169,7 +173,8 @@ namespace Family_GPS_Tracker_Api
 		public static IEnumerable<String> AsRoleDtoList(this IEnumerable<ApplicationUserRole> userRoles)
 		{
 			var newRoles = new List<String>();
-			if (userRoles != null) {
+			if (userRoles != null)
+			{
 				foreach (var userRole in userRoles)
 				{
 					newRoles.Add(userRole.Role.Name);
@@ -182,14 +187,14 @@ namespace Family_GPS_Tracker_Api
 
 		// PairingCode Extension Methods
 
-		/*
+/*
 		public static PairingCodeDto AsPairingCodeDto(this String pairingCode)
 		{
 			return new PairingCodeDto
 			{
 				code = pairingCode
 			};
-		}
+		}*/
 
 		// Notification Extension Methods
 
@@ -217,11 +222,13 @@ namespace Family_GPS_Tracker_Api
 			}
 
 			return notificationDtoList;
-		}*/
+		}
 
-		public static string GetUserId(this HttpContext httpContext) {
+		public static string GetUserId(this HttpContext httpContext)
+		{
 
-			if (httpContext.User == null) {
+			if (httpContext.User == null)
+			{
 				return string.Empty;
 			}
 

@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos
 {
-	public class ChildDto
+	public class ChildResponse
 	{
-		public Guid UserId { get; set; }
+		public Guid ChildId { get; set; }
 		public string Name { get; set; }
 		public string Email { get; set; }
 		public Guid? parentId { get; set; }
+		public IEnumerable<String> Roles { get; set; }
 	}
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Family_GPS_Tracker_Api.Migrations
 {
-    public partial class addedidentity : Migration
+    public partial class AddedIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -156,23 +156,22 @@ namespace Family_GPS_Tracker_Api.Migrations
                 name: "Parent",
                 columns: table => new
                 {
-                    parent_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     device_token = table.Column<string>(type: "varchar(220)", unicode: false, maxLength: 220, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parent", x => x.parent_id);
+                    table.PrimaryKey("parent_id", x => x.ParentId);
                     table.ForeignKey(
                         name: "FK_Parent_User",
-                        column: x => x.user_id,
+                        column: x => x.ParentId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "RefreshTokens",
+                name: "RefreshToken",
                 columns: table => new
                 {
                     Token = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -185,9 +184,9 @@ namespace Family_GPS_Tracker_Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RefreshTokens", x => x.Token);
+                    table.PrimaryKey("PK_RefreshToken", x => x.Token);
                     table.ForeignKey(
-                        name: "FK_RefreshTokens_AspNetUsers_UserId",
+                        name: "FK_RefreshToken_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -198,23 +197,21 @@ namespace Family_GPS_Tracker_Api.Migrations
                 name: "Child",
                 columns: table => new
                 {
-                    child_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    parent_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    pairing_code = table.Column<string>(type: "nchar(10)", fixedLength: true, maxLength: 10, nullable: true)
+                    ChildId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    parent_id = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Child", x => x.child_id);
+                    table.PrimaryKey("child_id", x => x.ChildId);
                     table.ForeignKey(
                         name: "FK_Child_Parent",
                         column: x => x.parent_id,
                         principalTable: "Parent",
-                        principalColumn: "parent_id",
+                        principalColumn: "ParentId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Child_User",
-                        column: x => x.user_id,
+                        column: x => x.ChildId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -238,7 +235,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                         name: "FK_Geofence_Child",
                         column: x => x.child_id,
                         principalTable: "Child",
-                        principalColumn: "child_id",
+                        principalColumn: "ChildId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -261,7 +258,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                         name: "FK_Location_Child",
                         column: x => x.child_id,
                         principalTable: "Child",
-                        principalColumn: "child_id",
+                        principalColumn: "ChildId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -283,14 +280,36 @@ namespace Family_GPS_Tracker_Api.Migrations
                         name: "FK_Notification_Child",
                         column: x => x.child_id,
                         principalTable: "Child",
-                        principalColumn: "child_id",
+                        principalColumn: "ChildId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Notification_Parent",
                         column: x => x.parent_id,
                         principalTable: "Parent",
-                        principalColumn: "parent_id",
+                        principalColumn: "ParentId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PairingCode",
+                columns: table => new
+                {
+                    PairingCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<int>(type: "int", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    ChildId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PairingCode", x => x.PairingCodeId);
+                    table.ForeignKey(
+                        name: "FK_PairingCode_Child",
+                        column: x => x.ChildId,
+                        principalTable: "Child",
+                        principalColumn: "ChildId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -338,12 +357,6 @@ namespace Family_GPS_Tracker_Api.Migrations
                 column: "parent_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Child_user_id",
-                table: "Child",
-                column: "user_id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Geofence_child_id",
                 table: "Geofence",
                 column: "child_id");
@@ -364,14 +377,14 @@ namespace Family_GPS_Tracker_Api.Migrations
                 column: "parent_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parent_user_id",
-                table: "Parent",
-                column: "user_id",
+                name: "IX_PairingCode_ChildId",
+                table: "PairingCode",
+                column: "ChildId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_UserId",
-                table: "RefreshTokens",
+                name: "IX_RefreshToken_UserId",
+                table: "RefreshToken",
                 column: "UserId");
         }
 
@@ -402,7 +415,10 @@ namespace Family_GPS_Tracker_Api.Migrations
                 name: "Notification");
 
             migrationBuilder.DropTable(
-                name: "RefreshTokens");
+                name: "PairingCode");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
