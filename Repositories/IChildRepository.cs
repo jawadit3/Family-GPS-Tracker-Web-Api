@@ -12,9 +12,10 @@ namespace Family_GPS_Tracker_Api.Repositories
 		public Task<bool> CreateChildAsync(Child child);
 		public Task<Child> GetChildByIdAsync(Guid childId);
 		public Task<Child> GetChildDetailsByIdAsync(Guid childId);
-		public Task<bool> UpdatePairingCodeAsync(Guid childId, PairingCode pairingCode);
-		public Task<bool> CreatePairingCodeAsync(Guid childId, PairingCode pairingCode);
-		public Task<PairingCode> GetPairingCodeAsync(Guid childId);
+		public Task<bool> UpdatePairingCodeAsync(PairingCode pairingCode);
+		public Task<bool> CreatePairingCodeAsync(PairingCode pairingCode);
+		public Task<PairingCode> GetPairingCodeAsyncByChildId(Guid childId);
+		public Task<PairingCode> GetPairingCodeAsync(string pairingCode);
 
 	}
 }

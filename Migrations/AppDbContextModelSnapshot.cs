@@ -15,9 +15,9 @@ namespace Family_GPS_Tracker_Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.0");
+                .HasAnnotation("ProductVersion", "5.0.16")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Family_GPS_Tracker_Api.Domain.PairingCode", b =>
                 {
@@ -28,8 +28,8 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.Property<Guid>("ChildId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -87,8 +87,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("parent_id");
 
-                    b.HasKey("ChildId")
-                        .HasName("child_id");
+                    b.HasKey("ChildId");
 
                     b.HasIndex("ParentId");
 
@@ -164,7 +163,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -253,7 +252,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -355,7 +354,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("unique_number")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasKey("LocationId");
 

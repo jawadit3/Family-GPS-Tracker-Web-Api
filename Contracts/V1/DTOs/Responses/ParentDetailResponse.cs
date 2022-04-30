@@ -8,6 +8,7 @@ namespace Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos
 {
 	public class ParentDetailResponse
 	{
+		
 		public Guid ParentId { get; set; }
 		public string Name { get; set; }
 		public string Email { get; set; }

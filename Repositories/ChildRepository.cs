@@ -24,10 +24,10 @@ namespace Family_GPS_Tracker_Api.Repositories
 			return created > 0;
 		}
 
-		public Task<bool> CreatePairingCodeAsync(Guid childId, PairingCode pairingCode)
+		public async Task<bool> CreatePairingCodeAsync(PairingCode pairingCode)
 		{
-			pairingCode
-			await _db.PairingCodes.AddAsync(child);
+
+			await _db.PairingCodes.AddAsync(pairingCode);
 			var created = await _db.SaveChangesAsync();
 			return created > 0;
 		}
@@ -35,6 +35,7 @@ namespace Family_GPS_Tracker_Api.Repositories
 		public async Task<Child> GetChildByIdAsync(Guid childId)
 		{
 			return await _db.Children
+				.Include(child => child.PairingCode)
 				.Include(child => child.User)
 				.ThenInclude(user => user.UserRoles)
 				.ThenInclude(userRoles => userRoles.Role)
@@ -49,19 +50,25 @@ namespace Family_GPS_Tracker_Api.Repositories
 				.FirstOrDefaultAsync(x => x.ChildId == childId);
 		}
 
-		public async Task<PairingCode> GetPairingCodeAsync(Guid childId)
+		public async Task<PairingCode> GetPairingCodeAsyncByChildId(Guid childId)
 		{
-			return await _db.PairingCodes.FirstOrDefaultAsync(x => x.ChildId == childId);
+			return await _db.PairingCodes
+				.Include(x => x.Child)
+				.FirstOrDefaultAsync(x => x.ChildId == childId);
 		}
 
-		public async Task<bool> UpdatePairingCodeAsync(Guid childId)
+		public async Task<PairingCode> GetPairingCodeAsync(string pairingCode)
 		{
-			throw new NotImplementedException();
+			return await _db.PairingCodes
+				.Include(x => x.Child)
+				.FirstOrDefaultAsync();
 		}
 
-		public Task<bool> UpdatePairingCodeAsync(Guid childId, PairingCode pairingCode)
+		public async Task<bool> UpdatePairingCodeAsync(PairingCode pairingCode)
 		{
-			throw new NotImplementedException();
+			_db.PairingCodes.Update(pairingCode);
+			var updated = await _db.SaveChangesAsync();
+			return updated > 0;
 		}
 
 

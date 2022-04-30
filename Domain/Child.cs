@@ -10,15 +10,7 @@ namespace Family_GPS_Tracker_Api.Models
 {
     public partial class Child
     {
-        public Child()
-        {
-            Geofences = new HashSet<Geofence>();
-            Locations = new HashSet<Location>();
-            Notifications = new HashSet<Notification>();
-            User = new ApplicationUser();
-            PairingCode = new PairingCode();
-        }
-
+       
        
         public Guid? ParentId { get; set; }
         public Guid ChildId { get; set; }

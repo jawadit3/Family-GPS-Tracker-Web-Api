@@ -15,15 +15,15 @@ namespace Family_GPS_Tracker_Api.Contracts
 			public const string Get = Base + "/parent/{parentId}";
 			public const string GetDetails = Base + "/parent/details/{parentId}";
 			public const string UpdateToken = Base + "/parent/updateToken/{parentId}";
+			public const string LinkChild = Base + "/parent/linkChild/{parentId}";
 		}
 
 		public static class Child
 		{
 			public const string Get = Base + "/child/{childId}";
 			public const string GetDetails = Base + "/child/details/{childId}";
-			public const string UpdatePairingCode = Base + "/child/updatePairingCode/{childId}";
 			public const string GetPairingCode = Base + "/child/pairingCode/{childId}";
-			public const string LinkParent = Base + "/child/linkParent";
+			
 		}
 
 		public static class Identity

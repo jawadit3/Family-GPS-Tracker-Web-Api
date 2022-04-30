@@ -15,7 +15,6 @@ using Family_GPS_Tracker_Api.Domain;
 namespace Family_GPS_Tracker_Api.Controllers
 {
 	[ApiController]
-	[Route("/child")]
 	public class ChildController : ControllerBase
 	{
 
@@ -62,22 +61,44 @@ namespace Family_GPS_Tracker_Api.Controllers
 		[HttpGet(ApiRoutes.Child.GetPairingCode)]
 		public async Task<ActionResult<PairingCodeResponse>> GetPairingCodeAsync([FromRoute] Guid childId)
 		{
-			var existingPairingCode = await _childRepository.GetPairingCodeAsync(childId);
+			var existingPairingCode = await _childRepository.GetPairingCodeAsyncByChildId(childId);
 
-			if (existingPairingCode == null) {
-				var newPairingCode = new PairingCode {
+			if (existingPairingCode == null)
+			{
+				var newPairingCode = new PairingCode
+				{
 					ChildId = childId,
-					Code = 
+					Code = new Random().Next(10000, 99999).ToString(),
+					CreationDate = DateTime.UtcNow,
+					ExpiryDate = DateTime.UtcNow.AddHours(2)
 				};
-				return NotFound(new { message = "Pairing code doesnt exist." });
+
+				var isCreated = await _childRepository.CreatePairingCodeAsync(newPairingCode);
+
+				if (isCreated) {
+					return Ok(_mapper.Map<PairingCodeResponse>(newPairingCode));
+				}
 			}
 
+			else if (existingPairingCode != null)
+			{
+				var updatedPairingCode = existingPairingCode;
+				updatedPairingCode.Code = new Random().Next(10000, 99999).ToString();
+				updatedPairingCode.CreationDate = DateTime.UtcNow;
+				updatedPairingCode.ExpiryDate = DateTime.UtcNow.AddHours(2);
+				updatedPairingCode.IsUsed = false;
 
-			
-			return _mapper.Map<PairingCodeResponse>(pairingCode);
+				var isUpdated = await _childRepository.UpdatePairingCodeAsync(updatedPairingCode);
+
+				if (isUpdated)
+				{
+					return Ok(_mapper.Map<PairingCodeResponse>(updatedPairingCode));
+				}
+			}
+
+			return NotFound(new { message = "Pairing code couldn't be generated." });
+
 		}
-
-
 	}
 }
 

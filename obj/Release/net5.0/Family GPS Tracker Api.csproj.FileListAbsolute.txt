@@ -70,3 +70,5 @@ C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Re
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\Microsoft.Extensions.Options.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\Microsoft.Extensions.Primitives.dll
 C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Admin\source\repos\Family GPS Tracker Api\Family GPS Tracker Api\bin\Release\net5.0\System.Diagnostics.DiagnosticSource.dll

@@ -47,9 +47,6 @@ namespace Family_GPS_Tracker_Api.Models
             modelBuilder.Entity<Child>(entity =>
             {
                 entity.ToTable("Child");
-
-                entity.HasKey(e => e.ChildId)
-                .HasName("child_id");
      
                 entity.Property(e => e.ParentId).HasColumnName("parent_id");
 

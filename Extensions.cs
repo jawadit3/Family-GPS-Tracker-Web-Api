@@ -154,7 +154,7 @@ namespace Family_GPS_Tracker_Api
 			return null;
 		}
 
-		public static ParentDetailDto AsParentDetailDto(this Parent parent)
+		/*public static ParentDetailDto AsParentDetailDto(this Parent parent)
 		{
 			return new ParentDetailDto
 			{
@@ -168,7 +168,7 @@ namespace Family_GPS_Tracker_Api
 				Children = parent.Children.AsChildDtoList()
 
 			};
-		}
+		}*/
 
 		public static IEnumerable<String> AsRoleDtoList(this IEnumerable<ApplicationUserRole> userRoles)
 		{

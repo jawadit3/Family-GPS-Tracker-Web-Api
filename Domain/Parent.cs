@@ -9,12 +9,7 @@ namespace Family_GPS_Tracker_Api.Models
 {
     public partial class Parent
     {
-        public Parent()
-        {
-            Children = new HashSet<Child>();
-            Notifications = new HashSet<Notification>();
-            User = new ApplicationUser();
-        }
+        
 
         public Guid ParentId { get; set; }
         public string DeviceToken { get; set; }

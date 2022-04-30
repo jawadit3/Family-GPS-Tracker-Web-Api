@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Family_GPS_Tracker_Api.Migrations
 {
-    public partial class AddedIdentity : Migration
+    public partial class added_identity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -202,7 +202,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("child_id", x => x.ChildId);
+                    table.PrimaryKey("PK_Child", x => x.ChildId);
                     table.ForeignKey(
                         name: "FK_Child_Parent",
                         column: x => x.parent_id,
@@ -295,7 +295,7 @@ namespace Family_GPS_Tracker_Api.Migrations
                 columns: table => new
                 {
                     PairingCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsUsed = table.Column<bool>(type: "bit", nullable: false),

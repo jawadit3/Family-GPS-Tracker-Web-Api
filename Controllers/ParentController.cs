@@ -11,20 +11,23 @@ using System.Threading.Tasks;
 using Family_GPS_Tracker_Api.Domain;
 using Family_GPS_Tracker_Api.Contracts.V1.DTOs.Responses;
 using AutoMapper;
+using Family_GPS_Tracker_Api.Contracts.V1.DTOs.Requests;
 
 namespace Family_GPS_Tracker_Api.Controllers
 {
 
 	[ApiController]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class ParentController : ControllerBase
 	{
 		private IParentRepository _parentRepository;
+		private IChildRepository _childRepository;
 		private readonly IMapper _mapper;
-		public ParentController(IParentRepository parentRepository, IMapper mapper)
+		public ParentController(IParentRepository parentRepository, IMapper mapper, IChildRepository childRepository)
 		{
 			_parentRepository = parentRepository;
 			_mapper = mapper;
+			_childRepository = childRepository;
 		}
 
 		[HttpGet(ApiRoutes.Parent.Get)]
@@ -79,6 +82,48 @@ namespace Family_GPS_Tracker_Api.Controllers
 			}
 
 			return Ok(deviceToken.AsDeviceTokenResponse());
+		}
+
+		[HttpPut(ApiRoutes.Parent.LinkChild)]
+		public async Task<ActionResult<ParentDetailResponse>> LinkChildAsync([FromRoute] Guid parentId, [FromBody] PairingCodeRequest pairingCodeRequest)
+		{
+			var parent = await _parentRepository.GetParentByIdAsync(parentId);
+			if (parent == null)
+			{
+				return NotFound(new { message = "User doesn't exist with this userId" });
+			}
+
+			if (!parentId.ToString().Equals(HttpContext.GetUserId()))
+			{
+
+				return BadRequest(new { message = "You cannot perform this operation" });
+			}
+
+			var pairingCode = await _childRepository.GetPairingCodeAsync(pairingCodeRequest.Code);
+
+			if (pairingCode == null) {
+
+				return BadRequest(new { message = "Pairing code doesnt exist." });
+			}
+
+			if (pairingCode.IsUsed)
+			{
+
+				return BadRequest(new { message = "Pairing has already been used." });
+
+			}
+
+			pairingCode.IsUsed = true;
+
+			var isChildLinked = await _parentRepository.LinkChildAsync(parent, pairingCode.Child);
+
+			if (!isChildLinked)
+			{
+				return BadRequest(new { message = "Child couldn't be linked." });
+			}
+
+			var parentDetail = await _parentRepository.GetParentDetailsByIdAsync(parentId);
+			return Ok(_mapper.Map<ParentDetailResponse>(parentDetail));
 		}
 	}
 }

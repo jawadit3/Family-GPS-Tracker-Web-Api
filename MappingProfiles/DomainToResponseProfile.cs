@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Family_GPS_Tracker_Api.Models.IdentityModels;
 
 namespace Family_GPS_Tracker_Api.MappingProfiles
 {
@@ -26,7 +27,7 @@ namespace Family_GPS_Tracker_Api.MappingProfiles
 				.Select(ur => ur.Role).ToList()
 				.Select(r => r.Name).ToList()));
 
-			CreateMap<Parent, ParentDetailDto>()
+			CreateMap<Parent, ParentDetailResponse>()
 				.ForMember(des => des.Name,
 				opt => opt.MapFrom(src => src.User.UserName))
 				.ForMember(des => des.Email,
@@ -36,7 +37,17 @@ namespace Family_GPS_Tracker_Api.MappingProfiles
 				.ForMember(des => des.Roles,
 				opt => opt.MapFrom(src => src.User.UserRoles
 				.Select(ur => ur.Role).ToList()
-				.Select(r => r.Name).ToList()));
+				.Select(r => r.Name).ToList()))
+				.ForMember(des => des.Children,
+				opt => opt.MapFrom(src => src.Children
+				.Select(c => new ChildResponse {
+					ChildId = c.ChildId,
+					Name = c.User.UserName,
+					Email = c.User.Email,
+					Roles = c.User.UserRoles
+					.Select(ur => ur.Role).ToList()
+					.Select(r => r.Name).ToList()
+				})));
 
 			CreateMap<Child, ChildResponse>()
 				.ForMember(des => des.Name,

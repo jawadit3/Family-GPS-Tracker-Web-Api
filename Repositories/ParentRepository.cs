@@ -41,12 +41,22 @@ namespace Family_GPS_Tracker_Api.Repositories
 		{
 			return await _db.Parents
 				.Include(parent => parent.Children)
+				.ThenInclude(child => child.User)
+				.ThenInclude(user => user.UserRoles)
+				.ThenInclude(userRoles => userRoles.Role)
 				.Include(parent => parent.User)
 				.ThenInclude(user => user.UserRoles)
 				.ThenInclude(userRoles => userRoles.Role)
 				.FirstOrDefaultAsync(parent => parent.ParentId == parentId);
 
 
+		}
+
+		public async Task<bool> LinkChildAsync(Parent parent, Child child)
+		{
+			child.Parent = parent;
+			var isChildLinked = await _db.SaveChangesAsync();
+			return isChildLinked > 0;
 		}
 
 		public async Task<bool> UpdateDeviceTokenAsync(Parent parent, DeviceToken deviceToken)
