@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CatalogWebApi.Models
+namespace Family_GPS_Tracker_Api.Domain
 {
     public class ResponseModel
     {
@@ -12,7 +12,7 @@ namespace CatalogWebApi.Models
         public bool IsSuccess { get; set; }
 
         [JsonProperty("statusCode")]
-        public int StatusCode { get; set; }
+        public string StatusCode { get; set; }
 
         [JsonProperty("message")]
         public string Message { get; set; }

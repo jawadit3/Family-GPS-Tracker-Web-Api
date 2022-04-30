@@ -65,6 +65,14 @@ namespace Family_GPS_Tracker_Api.Repositories
 			return await _db.SaveChangesAsync() > 0;
 		}
 
+		public async Task<String> GetDeviceTokenAsync(Guid parentId)
+		{
+			return await _db.Parents.Where(parent => parent.ParentId == parentId)
+				.Select(parent => parent.DeviceToken)
+				.SingleOrDefaultAsync();
+
+		}
+
 
 
 		/*public void CreateParent(Parent item)
@@ -109,13 +117,7 @@ namespace Family_GPS_Tracker_Api.Repositories
 		}
 
 
-		public String GetDeviceToken(Guid id)
-		{
-			return _db.Parents.Where(parent => parent.ParentId == id)
-				.Select(parent => parent.DeviceToken)
-				.SingleOrDefault();
-
-		}
+		
 
 		public Parent UpdateDeviceToken(Parent parent, String deviceToken)
 		{

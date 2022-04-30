@@ -8,6 +8,8 @@ namespace CatalogWebApi.Models
 {
 	public class GoogleNotification
 	{
+        [JsonProperty("to")]
+        public string DeviceToken { get; set; }
         public class DataPayload
         {
             [JsonProperty("title")]

@@ -33,5 +33,11 @@ namespace Family_GPS_Tracker_Api.Contracts
 			public const string Login = Base + "/identity/login";
 			public const string RefreshToken = Base + "/identity/refresh";
 		}
+
+		public static class Notification
+		{
+			public const string SendNotification = Base + "/notification/send";
+			
+		}
 	}
 }

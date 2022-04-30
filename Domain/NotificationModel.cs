@@ -8,8 +8,12 @@ namespace CatalogWebApi.Models
 {
         public class NotificationModel
         {
-            [JsonProperty("deviceId")]
-            public string DeviceId { get; set; }
+            [JsonProperty("senderId")]
+            public Guid SenderId { get; set; }
+            [JsonProperty("RecieverId")]
+            public Guid RecieverId { get; set; }
+            [JsonProperty("deviceToken")]
+            public string DeviceToken { get; set; }
             [JsonProperty("isAndroiodDevice")]
             public bool IsAndroiodDevice { get; set; }
             [JsonProperty("title")]

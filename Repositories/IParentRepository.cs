@@ -14,5 +14,6 @@ namespace Family_GPS_Tracker_Api.Repositories
 		public Task<Parent> GetParentDetailsByIdAsync(Guid parentId);
 		public Task<bool> LinkChildAsync(Parent parent, Child child);
 		public Task<bool> UpdateDeviceTokenAsync(Parent parent, DeviceToken deviceToken);
+		public Task<String> GetDeviceTokenAsync(Guid parentId);
 	}
 }

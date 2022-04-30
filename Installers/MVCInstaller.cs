@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,14 +15,14 @@ namespace Family_GPS_Tracker_Api.Installers
 {
 	public class MvcInstaller : IInstaller
 	{
-		public void installServices(IServiceCollection services, IConfiguration Configuration)
+		public void installServices(IServiceCollection services, IConfiguration configuration)
 		{
 
 
 			services.AddControllers();
 
 			var jwtOptions = new JwtOptions();
-			Configuration.Bind(nameof(jwtOptions), jwtOptions);
+			configuration.Bind(nameof(jwtOptions), jwtOptions);
 			services.AddSingleton(jwtOptions);
 
 			var tokenValidationParameter = new TokenValidationParameters
@@ -46,12 +47,20 @@ namespace Family_GPS_Tracker_Api.Installers
 					x.TokenValidationParameters = tokenValidationParameter;
 				});
 			
-
-			
 			services.AddControllersWithViews()
 				.AddNewtonsoftJson(options =>
 			options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 			);
+
+			var fcmNotificationOptions = new FcmNotificationOptions();
+			configuration.Bind(nameof(fcmNotificationOptions), fcmNotificationOptions);
+			services.AddHttpClient("FCM", client => {
+
+				client.BaseAddress = new Uri("https://fcm.googleapis.com");
+				client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", string.Format("key={0}", fcmNotificationOptions.ServerKey));
+				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+			});
 		}
 	}
 }
