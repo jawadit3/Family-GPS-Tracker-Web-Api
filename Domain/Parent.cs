@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
 #nullable disable
 
-namespace Family_GPS_Tracker_Api.Models
+namespace Family_GPS_Tracker_Api.Domain
 {
     public partial class Parent
     {

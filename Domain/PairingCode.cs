@@ -1,4 +1,4 @@
-﻿using Family_GPS_Tracker_Api.Models;
+﻿using Family_GPS_Tracker_Api.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

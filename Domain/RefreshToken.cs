@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
 namespace Family_GPS_Tracker_Api.Domain
 {

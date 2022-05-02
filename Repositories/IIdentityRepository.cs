@@ -1,6 +1,6 @@
 ﻿using Family_GPS_Tracker_Api.Domain;
 using System.Threading.Tasks;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
 namespace Family_GPS_Tracker_Api.Repositories
 {

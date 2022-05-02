@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
+using Family_GPS_Tracker_Api.Contracts.V1.DTOs.Responses;
 using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
+using Family_GPS_Tracker_Api.Contracts.V1.Responses;
 using Family_GPS_Tracker_Api.Domain;
-using Family_GPS_Tracker_Api.Models;
+using Family_GPS_Tracker_Api.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
 namespace Family_GPS_Tracker_Api.MappingProfiles
 {
@@ -59,8 +61,33 @@ namespace Family_GPS_Tracker_Api.MappingProfiles
 				.Select(ur => ur.Role).ToList()
 				.Select(r => r.Name).ToList()));
 
+			CreateMap<Child, ChildDetailResponse>()
+				.ForMember(des => des.Name,
+				opt => opt.MapFrom(src => src.User.UserName))
+				.ForMember(des => des.Email,
+				opt => opt.MapFrom(src => src.User.Email))
+				.ForMember(des => des.Roles,
+				opt => opt.MapFrom(src => src.User.UserRoles
+				.Select(ur => ur.Role).ToList()
+				.Select(r => r.Name).ToList()))
+				.ForMember(des => des.Parent,
+				opt => opt.MapFrom(src => new ParentResponse {
+					ParentId = src.Parent.ParentId,
+					Name = src.Parent.User.UserName,
+					Email = src.Parent.User.Email,
+					PhoneNumber = src.Parent.User.PhoneNumber,
+					Roles = src.Parent.User.UserRoles
+					.Select(ur => ur.Role).ToList()
+					.Select(r => r.Name).ToList()
+				}));
+
 			CreateMap<PairingCode, PairingCodeResponse>();
-				
+
+			CreateMap<DeviceToken, DeviceTokenResponse>();
+
+			CreateMap<AuthResult, AuthSuccessResponse>();
+
+			CreateMap<AuthResult, AuthFailedResponse>();
 		}
 	}
 }

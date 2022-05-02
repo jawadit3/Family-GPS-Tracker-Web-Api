@@ -1,4 +1,4 @@
-﻿using Family_GPS_Tracker_Api.Models;
+﻿using Family_GPS_Tracker_Api.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +46,9 @@ namespace Family_GPS_Tracker_Api.Repositories
 		{
 			return await _db.Children
 				.Include(c => c.Parent)
+				.ThenInclude(p => p.User)
+				.ThenInclude(u => u.UserRoles)
+				.ThenInclude(ur => ur.Role)
 				.Include(c => c.PairingCode)
 				.FirstOrDefaultAsync(x => x.ChildId == childId);
 		}
@@ -57,7 +60,7 @@ namespace Family_GPS_Tracker_Api.Repositories
 				.FirstOrDefaultAsync(x => x.ChildId == childId);
 		}
 
-		public async Task<PairingCode> GetPairingCodeAsync(string pairingCode)
+		public async Task<PairingCode> GetPairingCodeAsyncByCode(string pairingCode)
 		{
 			return await _db.PairingCodes
 				.Include(x => x.Child)

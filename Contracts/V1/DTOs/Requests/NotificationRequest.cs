@@ -9,10 +9,10 @@ namespace Family_GPS_Tracker_Api.Contracts.V1.RequestDtos
 	public class NotificationRequest
 	{
 
-        [JsonProperty("senderId")]
-        public Guid SenderId { get; set; }
-        [JsonProperty("RecieverId")]
-        public Guid RecieverId { get; set; }
+        [JsonProperty("childId")]
+        public Guid ChildId { get; set; }
+        [JsonProperty("ParentId")]
+        public Guid ParentId { get; set; }
         [JsonProperty("isAndroiodDevice")]
         public bool IsAndroiodDevice { get; set; }
         [JsonProperty("title")]

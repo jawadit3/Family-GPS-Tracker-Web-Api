@@ -1,135 +1,133 @@
-﻿/*using CatalogWebApi.Models;
-using CorePush.Google;
-using Family_GPS_Tracker_Api.Models;
+﻿using Family_GPS_Tracker_Api.Domain;
 using Family_GPS_Tracker_Api.Repositories;
-using Family_GPS_Tracker_Api.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
-using static CatalogWebApi.Models.GoogleNotification;
-using Microsoft.Extensions.Options;
+using static Family_GPS_Tracker_Api.Domain.GoogleNotification;
 
 namespace Family_GPS_Tracker_Api.Services
 {
-	public interface INotificationService
-	{
-		Task<ResponseModel> SendNotification(NotificationModel notificationModel,
-			Guid senderId,
-			Guid receiverId);
-		ICollection<Notification> GetNotifications();
-	}
-
 	public class NotificationService : INotificationService
 	{
-		private readonly FcmNotificationOptions _fcmNotificationSetting;
-		private readonly NotificationRepository _repository;
-		private readonly ChildRepository _childRepository;
-		private readonly ParentRepository _parentRepository;
+		public readonly IHttpClientFactory _httpClientFactory;
+		public readonly INotificationRepository _notificationRepository;
 
-		public NotificationService(
-
-			IOptions<FcmNotificationOptions> settings,
-			NotificationRepository repository,
-			ParentRepository parentRepository,
-			ChildRepository childRepository
-			)
+		public NotificationService(IHttpClientFactory httpClientFactory, INotificationRepository notificationRepository)
 		{
-			_fcmNotificationSetting = settings.Value;
-			_repository = repository;
-			_parentRepository = parentRepository;
-			_childRepository = childRepository;
+			_httpClientFactory = httpClientFactory;
+			_notificationRepository = notificationRepository;
 		}
 
-		public ICollection<Notification> GetNotifications()
+		public async Task<ResponseModel<IEnumerable<Notification>>> GetNotificationsByChildIdAsync(Guid childId)
 		{
-			return _repository.GetNotifications();
-		}
+			var notifications = await _notificationRepository.GetNotificationsByChildIdAsync(childId);
+			if (notifications == null) {
 
-		public async Task<ResponseModel> SendNotification(NotificationModel notificationModel,
-			Guid senderId,
-			Guid receiverId)
-		{
-			ResponseModel response = new ResponseModel();
-			try
-			{
-				if (notificationModel.IsAndroiodDevice)
+				return new ResponseModel<IEnumerable<Notification>>
 				{
-					//FCM Sender(Android Device);
+					Message = "No notifications found"
+				};
 
-					FcmSettings settings = new FcmSettings()
-					{
-						SenderId = _fcmNotificationSetting.SenderId,
-						ServerKey = _fcmNotificationSetting.ServerKey
-					};
-					HttpClient httpClient = new HttpClient();
-
-					string authorizationKey = string.Format("key={0}", settings.ServerKey);
-					string deviceToken = notificationModel.DeviceId;
-
-					httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authorizationKey);
-					httpClient.DefaultRequestHeaders.Accept
-							.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-					DataPayload dataPayload = new DataPayload();
-					dataPayload.Title = notificationModel.Title;
-					dataPayload.Body = notificationModel.Body;
-
-					GoogleNotification notification = new GoogleNotification();
-					notification.Data = dataPayload;
-					notification.Notification = dataPayload;
-
-					var fcm = new FcmSender(settings, httpClient);
-					var fcmSendResponse = await fcm.SendAsync(deviceToken, notification);
-
-					if (fcmSendResponse.IsSuccess())
-					{
-
-						var parent = _parentRepository.Get(receiverId);
-						var child = _childRepository.Get(senderId);
-						if (parent != null && child != null)
-						{
-							var notificationEntity = new Notification
-							{
-								NotificationId = Guid.NewGuid(),
-								Title = notificationModel.Title,
-								Message = notificationModel.Body,
-								//CreatedAt = DateTime.Now.ToString()
-							};
-							notificationEntity.Parent = parent;
-							notificationEntity.Child = child;
-							_repository.CreateNotification(notificationEntity);
-						}
-						response.IsSuccess = true;
-						response.Message = "Notification sent successfully";
-						return response;
-					}
-					else
-					{
-						response.IsSuccess = false;
-						response.Message = fcmSendResponse.Failure.ToString();
-						return response;
-					}
-				}
-				else
-				{
-					//Code here for APN Sender (iOS Device) 
-					//var apn = new ApnSender(apnSettings, httpClient);
-					//await apn.SendAsync(notification, deviceToken);
-				}
-				return response;
 			}
-			catch (Exception ex)
-			{
-				response.IsSuccess = false;
 
-				response.Message = ex.Message.ToString();
-				return response;
-			}
+			return new ResponseModel<IEnumerable<Notification>> {
+				IsSuccess = true,
+				Message = "Notifications found successfully",
+				Data = notifications
+			};
 		}
+
+		public async Task<ResponseModel<IEnumerable<Notification>>> GetNotificationsByParentIdAsync(Guid parentId)
+		{
+			var notifications = await _notificationRepository.GetNotificationsByParentIdAsync(parentId);
+			if (notifications == null)
+			{
+
+				return new ResponseModel<IEnumerable<Notification>>
+				{
+					Message = "No notifications found"
+				};
+
+			}
+
+			return new ResponseModel<IEnumerable<Notification>>
+			{
+				IsSuccess = true,
+				Message = "Notifications found successfully",
+				Data = notifications
+			};
+		}
+
+		public async Task<ResponseModel<Notification>> SendNotificationAsync(NotificationModel notificationModel)
+		{
+			var jsonData = MakePayload(notificationModel);
+
+			var httpClient = _httpClientFactory.CreateClient("FCM");
+
+			var response = await httpClient.PostAsync("/fcm/send", new StringContent(jsonData, Encoding.UTF8, "application/json"));
+			
+			if (!response.IsSuccessStatusCode)
+			{
+
+				return new ResponseModel<Notification>
+				{
+					Message = "something went wrong!",
+					StatusCode = response.StatusCode.ToString()
+				};
+
+			}
+
+			var isCreated = await _notificationRepository.CreateNotificationAsync( new Notification {
+				
+				ChildId = notificationModel.ChildId,
+				ParentId = notificationModel.ParentId,
+				Title = notificationModel.Title,
+				Message = notificationModel.Body,
+				CreatedAt = DateTime.Now.ToString()
+			});
+
+			if (!isCreated) {
+
+				return new ResponseModel<Notification>
+				{
+					
+					Message = "Notification Couldnt be registered",
+					StatusCode = "Internal Server Error"
+				};
+			}
+
+			return new ResponseModel<Notification>
+			{
+				IsSuccess =true,
+				Message = "Notification sent!",
+				StatusCode = response.StatusCode.ToString()
+			};
+
+		}
+
+		private string MakePayload(NotificationModel notificationModel)
+		{
+			DataPayload dataPayload = new DataPayload();
+			dataPayload.Title = notificationModel.Title;
+			dataPayload.Body = notificationModel.Body;
+
+			GoogleNotification notification = new GoogleNotification();
+			notification.Data = dataPayload;
+			notification.Notification = dataPayload;
+			notification.DeviceToken = notificationModel.DeviceToken;
+
+			return JsonConvert.SerializeObject(notification,
+				new JsonSerializerSettings
+				{
+					ContractResolver = new CamelCasePropertyNamesContractResolver()
+				});
+		}
+
+		
 	}
 }
-
-*/

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace Family_GPS_Tracker_Api.Models
+namespace Family_GPS_Tracker_Api.Domain
 {
     public partial class Notification
     {

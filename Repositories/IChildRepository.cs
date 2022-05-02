@@ -1,5 +1,5 @@
 ﻿using Family_GPS_Tracker_Api.Domain;
-using Family_GPS_Tracker_Api.Models;
+using Family_GPS_Tracker_Api.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Family_GPS_Tracker_Api.Repositories
 		public Task<bool> UpdatePairingCodeAsync(PairingCode pairingCode);
 		public Task<bool> CreatePairingCodeAsync(PairingCode pairingCode);
 		public Task<PairingCode> GetPairingCodeAsyncByChildId(Guid childId);
-		public Task<PairingCode> GetPairingCodeAsync(string pairingCode);
+		public Task<PairingCode> GetPairingCodeAsyncByCode(string pairingCode);
 
 	}
 }

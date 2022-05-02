@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
 #nullable disable
 
-namespace Family_GPS_Tracker_Api.Models
+namespace Family_GPS_Tracker_Api.Domain
 {
     public partial class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
     {
@@ -165,7 +165,7 @@ namespace Family_GPS_Tracker_Api.Models
                 entity.ToTable("Notification");
 
                 entity.Property(e => e.NotificationId)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("notification_id");
 
                 entity.Property(e => e.ChildId).HasColumnName("child_id");

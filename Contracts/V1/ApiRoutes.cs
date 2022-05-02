@@ -37,7 +37,9 @@ namespace Family_GPS_Tracker_Api.Contracts
 		public static class Notification
 		{
 			public const string SendNotification = Base + "/notification/send";
-			
+			public const string GetNotificationsByParentId = Base + "/notification/{parentId}";
+			public const string GetNotificationsByChildId = Base + "/notification/{childId}";
+
 		}
 	}
 }

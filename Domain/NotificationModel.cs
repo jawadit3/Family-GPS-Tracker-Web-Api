@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CatalogWebApi.Models
+namespace Family_GPS_Tracker_Api.Domain
 {
         public class NotificationModel
         {
-            [JsonProperty("senderId")]
-            public Guid SenderId { get; set; }
-            [JsonProperty("RecieverId")]
-            public Guid RecieverId { get; set; }
+            [JsonProperty("childId")]
+            public Guid ChildId { get; set; }
+            [JsonProperty("parentId")]
+            public Guid ParentId { get; set; }
             [JsonProperty("deviceToken")]
             public string DeviceToken { get; set; }
             [JsonProperty("isAndroiodDevice")]

@@ -1,9 +1,10 @@
-﻿using Family_GPS_Tracker_Api.Contracts;
+﻿using AutoMapper;
+using Family_GPS_Tracker_Api.Contracts;
 using Family_GPS_Tracker_Api.Contracts.V1.DTOs.Requests;
 using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
 using Family_GPS_Tracker_Api.Contracts.V1.Requests;
 using Family_GPS_Tracker_Api.Contracts.V1.Responses;
-using Family_GPS_Tracker_Api.Models;
+using Family_GPS_Tracker_Api.Domain;
 using Family_GPS_Tracker_Api.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
-namespace Family_GPS_Tracker_Api.Controllers
+namespace Family_GPS_Tracker_Api.V1.Controllers
 {
 	[ApiController]
 	public class IdentityController : ControllerBase
@@ -21,10 +22,12 @@ namespace Family_GPS_Tracker_Api.Controllers
 
 		private readonly IIdentityRepository _identityRepository;
 		private readonly IParentRepository _parentRepository;
-		public IdentityController(IIdentityRepository identityRepository, IParentRepository parentRepository)
+		private readonly IMapper _mapper;
+		public IdentityController(IIdentityRepository identityRepository, IParentRepository parentRepository, IMapper mapper)
 		{
 			_identityRepository = identityRepository;
 			_parentRepository = parentRepository;
+			_mapper = mapper;
 		}
 
 		// Handling Registration Request
@@ -43,24 +46,18 @@ namespace Family_GPS_Tracker_Api.Controllers
 
 			// Invoking RegisterParentAsync for registering parent
 
-			var authResponse = await _identityRepository.RegisterParentAsync(
+			var authResult = await _identityRepository.RegisterParentAsync(
 				applicationUser, createParentDto.Password);
 
 			// Checking whether the action was successful
 
-			if (!authResponse.IsSuccess) {
-				return BadRequest(new AuthFailedResponse {
-					Errors = authResponse.Errors
-				});
+			if (!authResult.IsSuccess) {
+				return BadRequest(_mapper.Map<AuthFailedResponse>(authResult));
 			}
-
-			
+		
 			// Returning Token on successfull registration
 
-			return Ok(new AuthSuccessResponse { 
-				Token = authResponse.Token,
-				RefreshToken = authResponse.RefreshToken
-			});
+			return Ok(_mapper.Map<AuthSuccessResponse>(authResult));
 		}
 
 
@@ -70,7 +67,7 @@ namespace Family_GPS_Tracker_Api.Controllers
 
 			// Invoking RegisterParentAsync for registering parent
 
-			var authResponse = await _identityRepository.RegisterChildAsync(
+			var authResult = await _identityRepository.RegisterChildAsync(
 				new ApplicationUser
 				{
 					UserName = createChildDto.Name,
@@ -79,21 +76,14 @@ namespace Family_GPS_Tracker_Api.Controllers
 
 			// Checking whether the action was successful
 
-			if (!authResponse.IsSuccess)
+			if (!authResult.IsSuccess)
 			{
-				return BadRequest(new AuthFailedResponse
-				{
-					Errors = authResponse.Errors
-				});
+				return BadRequest(_mapper.Map<AuthFailedResponse>(authResult));
 			}
 
 			// Returning Token on successfull registration
 
-			return Ok(new AuthSuccessResponse
-			{
-				Token = authResponse.Token,
-				RefreshToken = authResponse.RefreshToken
-			});
+			return Ok(_mapper.Map<AuthSuccessResponse>(authResult));
 		}
 
 		// Handling Login Request
@@ -106,27 +96,20 @@ namespace Family_GPS_Tracker_Api.Controllers
 
 			// Invoking LoginAsync for signing in the user
 
-			var authResponse = await _identityRepository.LoginAsync(
+			var authResult = await _identityRepository.LoginAsync(
 				loginRequest.Email,
 				loginRequest.Password);	
 
 			// Checking whether the action was successful
 
-			if (!authResponse.IsSuccess)
+			if (!authResult.IsSuccess)
 			{
-				return BadRequest(new AuthFailedResponse
-				{
-					Errors = authResponse.Errors
-				});
+				return BadRequest(_mapper.Map<AuthFailedResponse>(authResult));
 			}
 
 			// Returning Token on successfull registration
 
-			return Ok(new AuthSuccessResponse
-			{
-				Token = authResponse.Token,
-				RefreshToken = authResponse.RefreshToken
-			});
+			return Ok(_mapper.Map<AuthSuccessResponse>(authResult));
 		}
 
 		// Handling Refresh Token Request
@@ -136,30 +119,22 @@ namespace Family_GPS_Tracker_Api.Controllers
 		{
 			// Checking if user exists
 
-
 			// Invoking LoginAsync for signing in the user
 
-			var authResponse = await _identityRepository.RefreshTokenAsync(
+			var authResult = await _identityRepository.RefreshTokenAsync(
 				refreshTokenRequest.Token,
 				refreshTokenRequest.RefreshToken);
 
 			// Checking whether the action was successful
 
-			if (!authResponse.IsSuccess)
+			if (!authResult.IsSuccess)
 			{
-				return BadRequest(new AuthFailedResponse
-				{
-					Errors = authResponse.Errors
-				});
+				return BadRequest(_mapper.Map<AuthFailedResponse>(authResult));
 			}
 
 			// Returning Token on successfull registration
 
-			return Ok(new AuthSuccessResponse
-			{
-				Token = authResponse.Token,
-				RefreshToken = authResponse.RefreshToken
-			});
+			return Ok(_mapper.Map<AuthSuccessResponse>(authResult));
 		}
 
 	}

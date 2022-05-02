@@ -1,7 +1,7 @@
-﻿using CatalogWebApi.Models;
+﻿using Family_GPS_Tracker_Api.Domain;
 using CorePush.Apple;
 using CorePush.Google;
-using Family_GPS_Tracker_Api.Models;
+using Family_GPS_Tracker_Api.Domain;
 using Family_GPS_Tracker_Api.Repositories;
 using Family_GPS_Tracker_Api.Services;
 //using Family_GPS_Tracker_Api.Services;
@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
 namespace Family_GPS_Tracker_Api.Installers
 {
@@ -27,17 +27,16 @@ namespace Family_GPS_Tracker_Api.Installers
 			services.AddIdentity<ApplicationUser, ApplicationRole>()
 			.AddEntityFrameworkStores<AppDbContext>()
 			.AddDefaultTokenProviders();
-			/*services.AddScoped<UserRepository, UserRepository>();*/
 			services.AddScoped<IParentRepository, ParentRepository>();
 			services.AddScoped<IChildRepository, ChildRepository>();
-			services.AddScoped<LocationRepository, LocationRepository>();
+			//services.AddScoped<LocationRepository, LocationRepository>();
 			services.AddScoped<IIdentityRepository,IdentityRepository>();
-			//services.AddScoped<NotificationRepository, NotificationRepository>();
-			var appSettingsSection = Configuration.GetSection("FcmNotification");
+			services.AddScoped<INotificationRepository, NotificationRepository>();
+			//var appSettingsSection = Configuration.GetSection("FcmNotification");
 			//services.Configure<FcmNotificationOptions>(appSettingsSection);
-			services.AddScoped<INotificationService, MyNotificationService>();
-			services.AddHttpClient<FcmSender>();
-			services.AddHttpClient<ApnSender>();
+			services.AddScoped<INotificationService, NotificationService>();
+			//services.AddHttpClient<FcmSender>();
+			//services.AddHttpClient<ApnSender>();
 		}
 	}
 }

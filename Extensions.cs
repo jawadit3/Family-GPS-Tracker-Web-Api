@@ -2,13 +2,13 @@
 using Family_GPS_Tracker_Api.Contracts.V1.RequestDtos;
 using Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos;
 using Family_GPS_Tracker_Api.Domain;
-using Family_GPS_Tracker_Api.Models;
+using Family_GPS_Tracker_Api.Domain;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Family_GPS_Tracker_Api.Models.IdentityModels;
+using static Family_GPS_Tracker_Api.Domain.IdentityModels;
 
 namespace Family_GPS_Tracker_Api
 {
