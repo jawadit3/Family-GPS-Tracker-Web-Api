@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Family_GPS_Tracker_Api.Repositories
 {
-	public class LocationRepository
+	public class LocationRepository : ILocationRepository
 	{
 		private readonly AppDbContext _db;
 
@@ -16,44 +16,43 @@ namespace Family_GPS_Tracker_Api.Repositories
 			_db = db;
 		}
 
-		public Location Create(Guid childId, Location location) {
-			
-			_db.Locations.Add(location);
-			_db.SaveChanges();
-			return location;
+		public async Task<bool> CreateLocationAsync(Location location)
+		{
+
+			await _db.Locations.AddAsync(location);
+			var isCreated = await _db.SaveChangesAsync();
+			return isCreated > 0;
 		}
 
-		public Location Get(Guid childId)
+		public async Task<Location> GetLastLocationByChildIdAsync(Guid childId)
 		{
-			return _db.Locations
+			return await _db.Locations
 				.Include(location => location.Child)
-				.FirstOrDefault(location => location.ChildId == childId);
-		}
-
-		public Location GetAll(Guid childId)
-		{
-			return _db.Locations
-				.Include(location => location.Child)
-				.SingleOrDefault(location => location.ChildId == childId);
-		}
-
-		public Location GetLast(Guid childId)
-		{
-			var location = _db.Locations
-				.Include( location => location.Child)
+				.ThenInclude(location => location.User)
 				.Where(location => location.ChildId == childId)
 				.OrderByDescending(Location => Location.UniqueNumber)
-				.FirstOrDefault();
-			return location;
+				.FirstOrDefaultAsync();
+			
 		}
 
-		public IEnumerable<Location> GetLastTen(Guid childId)
+		public async Task<IEnumerable<Location>> GetLastTenLocationsByChildIdAsync(Guid childId)
 		{
-			return _db.Locations
+			return await _db.Locations
 				.Include(location => location.Child)
+				.ThenInclude(location => location.User)
 				.Where(location => location.ChildId == childId)
 				.OrderByDescending(location => location.UniqueNumber)
-				.Take(10);
+				.Take(10)
+				.ToListAsync();
+		}
+
+		public async Task<Location> GetLocationByChildIdAsync(Guid childId)
+		{
+			return await _db.Locations
+				.Include(location => location.Child)
+				.ThenInclude(location => location.User)
+				.Where(location => location.ChildId == childId)
+				.FirstOrDefaultAsync();
 		}
 	}
 }

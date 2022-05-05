@@ -88,6 +88,13 @@ namespace Family_GPS_Tracker_Api.MappingProfiles
 			CreateMap<AuthResult, AuthSuccessResponse>();
 
 			CreateMap<AuthResult, AuthFailedResponse>();
+
+			CreateMap<Location, LocationDto>()
+				.ForMember(des => des.ChildId,
+				opt => opt.MapFrom(src => src.ChildId))
+				.ForMember(des => des.ChildName,
+				opt => opt.MapFrom(src => src.Child.User.UserName));
+
 		}
 	}
 }

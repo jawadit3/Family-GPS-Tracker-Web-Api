@@ -12,5 +12,6 @@ namespace Family_GPS_Tracker_Api.Contracts.V1.ResponseDtos
 		public double Latitude { get; set; }
 		public String Time { get; set; }
 		public String ChildName { get; set; }
+		public Guid ChildId { get; set; }
 	}
 }
