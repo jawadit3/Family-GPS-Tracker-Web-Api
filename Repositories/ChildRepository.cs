@@ -26,6 +26,7 @@ namespace Family_GPS_Tracker_Api.Repositories
 		{
 			return _db.Children
 				.Include(child => child.Parent)
+				.Include(child => child.Geofences)
 				.SingleOrDefault(child => child.ChildId == id);
 		}
 

@@ -12,12 +12,10 @@ namespace CatalogWebApi.Models
         {
             [JsonProperty("title")]
             public string Title { get; set; }
-
-            [JsonProperty("senderName")]
-            public string senderName { get; set; }
-
             [JsonProperty("body")]
             public string Body { get; set; }
+            [JsonProperty("senderName")]
+            public string SenderName { get; set; }
         }
         [JsonProperty("priority")]
         public string Priority { get; set; } = "high";

@@ -10,13 +10,7 @@ namespace CatalogWebApi.Models
     {
         [JsonProperty("isSuccess")]
         public bool IsSuccess { get; set; }
-
-        [JsonProperty("statusCode")]
-        public int StatusCode { get; set; }
-
         [JsonProperty("message")]
         public string Message { get; set; }
-
-       
     }
 }

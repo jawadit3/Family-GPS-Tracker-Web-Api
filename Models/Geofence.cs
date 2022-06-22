@@ -9,8 +9,8 @@ namespace Family_GPS_Tracker_Api.Models
     {
         public Guid GeofenceId { get; set; }
         public string Category { get; set; }
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public double Radius { get; set; }
         public Guid ChildId { get; set; }
 

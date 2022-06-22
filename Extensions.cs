@@ -103,7 +103,8 @@ namespace Family_GPS_Tracker_Api
 				name = child.Name,
 				email = child.Email,
 				password = child.Password,
-				parent = child.Parent.AsParentDto()
+				parent = child.Parent.AsParentDto(),
+				geofences = child.Geofences.AsGeofenceDtoList()
 
 			};
 		}
@@ -200,6 +201,42 @@ namespace Family_GPS_Tracker_Api
 			}
 
 			return notificationDtoList;
+		}
+
+		public static IEnumerable<GeofenceDto> AsGeofenceDtoList(
+			this IEnumerable<Geofence> geofences)
+		{
+			var geofenceDtoList = new List<GeofenceDto>();
+
+			foreach (Geofence geofence in geofences)
+			{
+
+				geofenceDtoList.Add(new GeofenceDto
+				{
+					Category = geofence.Category,
+					GeofenceId = geofence.GeofenceId,
+					Latitude = geofence.Latitude,
+					Longitude = geofence.Longitude,
+					Radius = geofence.Radius,
+					//Child = geofence.Child.AsChildDto()
+					
+				});
+			}
+
+			return geofenceDtoList;
+		}
+
+		public static GeofenceDto AsGeofenceDto(this Geofence geofence)
+		{
+			return new GeofenceDto
+			{
+				GeofenceId = geofence.GeofenceId,
+				Category = geofence.Category,
+				Radius = geofence.Radius,
+				Latitude = geofence.Latitude,
+				Longitude = geofence.Longitude,
+				//Child = geofence.Child.AsChildDto()
+			};
 		}
 	}
 }

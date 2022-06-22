@@ -73,7 +73,7 @@ namespace Family_GPS_Tracker_Api.Services
 					DataPayload dataPayload = new DataPayload();
 					dataPayload.Title = notificationModel.Title;
 					dataPayload.Body = notificationModel.Body;
-					dataPayload.senderName = child.Name;
+					dataPayload.SenderName = child.Name;
 
 					GoogleNotification notification = new GoogleNotification();
 					notification.Data = dataPayload;

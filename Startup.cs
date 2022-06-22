@@ -54,6 +54,7 @@ namespace Family_GPS_Tracker_Api
 			services.AddScoped<ParentRepository, ParentRepository>();
 			services.AddScoped<ChildRepository, ChildRepository>();
 			services.AddScoped<LocationRepository, LocationRepository>();
+			services.AddScoped<GeofenceRepository, GeofenceRepository>();
 			services.AddScoped<NotificationRepository, NotificationRepository>();
 			var appSettingsSection = Configuration.GetSection("FcmNotification");
 			services.Configure<FcmNotificationSetting>(appSettingsSection);

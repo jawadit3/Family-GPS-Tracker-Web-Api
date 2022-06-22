@@ -13,5 +13,6 @@ namespace Family_GPS_Tracker_Api.Dtos
 		public string email { get; set; }
 		public string password { get; set; }
 		public ParentDto parent { get; set; }
+		public IEnumerable<GeofenceDto> geofences { get; set; }
 	}
 }
